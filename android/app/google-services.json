@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "168202520838",
+    "project_id": "game-record-app",
+    "storage_bucket": "game-record-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168202520838:android:a3063277fa0d71a3057687",
+        "android_client_info": {
+          "package_name": "com.o2yama.record_game_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "168202520838-bobfin3pnkj5rfq6h8nae2314s8fe3aj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGmHE9z0dpREGb0x71DCNVZcUmvLLLi4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "168202520838-bobfin3pnkj5rfq6h8nae2314s8fe3aj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "168202520838-p8r3s0dfr10q0tu23uo0nj9s1ajb8knj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.o2yama.recordGameApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,42 @@
+name: record_game_app
+description: Record App for Gymnastics Games 
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  freezed_annotation: ^0.14.2
+  riverpod: ^0.14.0+3
+  flutter_riverpod: ^0.14.0+3
+  hooks_riverpod: ^0.14.0+4
+  flutter_hooks: any
+  state_notifier: ^0.7.0
+  json_serializable: ^4.1.3
+  uuid: ^3.0.4
+  firebase_core: ^1.3.0
+  cloud_firestore: ^2.3.0
+  firebase_auth: ^2.0.0
+  adaptive_dialog: ^1.0.1
+  fluttertoast: ^8.0.7
+  app_tracking_transparency: ^2.0.1
+  permission_handler: ^8.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  freezed: ^0.14.2
+  build_runner: ^2.0.5
+  pedantic: ^1.11.0
+
+flutter:
+
+  uses-material-design: true
