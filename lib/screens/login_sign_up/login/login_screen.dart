@@ -1,25 +1,25 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:record_game_app/common/loading_screen_controller.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:record_game_app/common/loading_state.dart';
 import 'package:record_game_app/common/validator.dart';
-import 'package:record_game_app/common/widgets/text_flat_button.dart';
-import 'package:record_game_app/common/widgets/email_field.dart';
-import 'package:record_game_app/common/widgets/password_field.dart';
+import 'package:record_game_app/screens/login_sign_up/email_field.dart';
+import 'package:record_game_app/screens/login_sign_up/password_field.dart';
 import 'package:record_game_app/common/widgets/to_home_button.dart';
 import 'package:record_game_app/repository/auth_repository.dart';
-import 'package:record_game_app/screens/login_sign_up/sign_up_model.dart';
-import 'package:record_game_app/screens/login_sign_up/sign_up_screen.dart';
+import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_screen.dart';
 
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends HookWidget {
   void _onLoginButtonPressed(BuildContext context) {
     if (!Validator().validEmail(emailController.text)) {
       Validator().showValidMessage('メールアドレスをご確認ください。');
     } else if (!Validator().validPassword(passwordController.text)) {
       Validator().showValidMessage('パスワードは半角英数字7文字以上です。');
     } else {
-      context.read(loadingControllerProvider.notifier).startLoading();
+      context.read(loadingStateProvider.notifier).startLoading();
       try {
         AuthRepository.instance
             .signIn(emailController.text, passwordController.text);
@@ -31,7 +31,7 @@ class LoginScreen extends ConsumerWidget {
           title: '$error',
         );
       }
-      context.read(loadingControllerProvider.notifier).endLoading();
+      context.read(loadingStateProvider.notifier).endLoading();
       // todo: ユーザーデータ取得(試合)
       // todo: controllerのclear
     }
@@ -52,9 +52,8 @@ class LoginScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final _loadingController = watch(loadingControllerProvider);
-
+  Widget build(BuildContext context) {
+    final _isLoading = useProvider(loadingStateProvider);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
@@ -74,16 +73,31 @@ class LoginScreen extends ConsumerWidget {
                     const SizedBox(height: 24),
                     PasswordField(controller: passwordController),
                     const SizedBox(height: 50),
-                    TextFlatButton(
-                        text: 'ログイン',
-                        onPressed: () => _onLoginButtonPressed(context)),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border:
+                            Border.all(color: Theme.of(context).primaryColor),
+                      ),
+                      child: TextButton(
+                        onPressed: () => _onLoginButtonPressed(context),
+                        child: Text(
+                          'ログイン',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 30),
                     _toSignUpScreenButton(context),
                     const SizedBox(height: 300),
                   ],
                 ),
               ),
-              _loadingController.isLoading
+              _isLoading
                   ? Container(
                       color: Colors.grey.withOpacity(0.6),
                       child: CircularProgressIndicator(),

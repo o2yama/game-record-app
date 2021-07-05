@@ -8,23 +8,30 @@ class AuthRepository {
   }
 
   final _auth = FirebaseAuth.instance;
-  bool isLoading = false;
+  User? user;
 
-  Future<User?> createUser(String email, password) async {
+  Future<void> createUser(String email, password) async {
     try {
       final result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      user = result.user;
       await sendEmailVerification();
-      return result.user;
     } on FirebaseAuthException catch (e) {
       throw AuthException(_convertErrorMessage(e.code));
     } catch (e) {
-      throw e.toString();
+      print(e);
+      rethrow;
     }
   }
 
   Future<void> sendEmailVerification() async {
     await _auth.currentUser!.sendEmailVerification();
+  }
+
+  Future<bool> getIsEmailVerified() async {
+    final user = _auth.currentUser!;
+    await user.reload();
+    return user.emailVerified;
   }
 
   Future<void> signIn(String email, String password) async {
@@ -36,7 +43,7 @@ class AuthRepository {
         signOut();
       }
     } catch (e) {
-      throw e.toString();
+      rethrow;
     }
   }
 

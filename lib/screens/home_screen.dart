@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'login_sign_up/sign_up_screen.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_model.dart';
+import 'login_sign_up/sign_up/sign_up_screen.dart';
 
 TextEditingController searchController = TextEditingController();
 
@@ -51,6 +52,7 @@ class HomeScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _signUpModel = useProvider(signUpModel);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
@@ -63,16 +65,18 @@ class HomeScreen extends HookWidget {
                 color: Colors.white,
               ),
             ),
-            IconButton(
-                icon: Icon(Icons.login),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SignUpScreen(),
-                        fullscreenDialog: true,
-                      ));
-                }),
+            _signUpModel.appUser.userId == ''
+                ? IconButton(
+                    icon: Icon(Icons.login),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignUpScreen(),
+                            fullscreenDialog: true,
+                          ));
+                    })
+                : Container(),
           ],
           title: searchField(context),
         ),
