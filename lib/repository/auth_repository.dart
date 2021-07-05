@@ -36,12 +36,11 @@ class AuthRepository {
 
   Future<void> signIn(String email, String password) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-
-      if (!_auth.currentUser!.emailVerified) {
-        _auth.currentUser!.sendEmailVerification();
-        signOut();
-      }
+      final result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      user = result.user;
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(_convertErrorMessage(e.code));
     } catch (e) {
       rethrow;
     }

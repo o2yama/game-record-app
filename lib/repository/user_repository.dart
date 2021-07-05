@@ -6,8 +6,6 @@ class UserRepository {
   UserRepository._();
   static final instance = UserRepository._();
 
-  AppUser appUser = AppUser().copyWith();
-
   factory UserRepository() {
     return UserRepository();
   }
@@ -15,17 +13,30 @@ class UserRepository {
   AuthRepository get authRepository => AuthRepository.instance;
   FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<void> createUserInDB() async {
-    appUser = AppUser().copyWith(
+  Future<bool> isExistUser() async {
+    final userQuery =
+        await _db.collection('users').doc(authRepository.user!.uid).get();
+    if (userQuery.exists) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<AppUser> createUserInDB() async {
+    final appUser = AppUser().copyWith(
       userId: authRepository.user!.uid,
       email: authRepository.user!.email!,
     );
     await _db.collection('users').doc(appUser.userId).set(appUser.toJson());
+    return appUser;
   }
 
-  Future<void> getUserData() async {
+  Future<AppUser> getUserData() async {
     final query =
         await _db.collection('users').doc(authRepository.user!.uid).get();
-    appUser = AppUser.fromJson(Map.from(query.data() as Map<String, dynamic>));
+    final appUser =
+        AppUser.fromJson(Map.from(query.data() as Map<String, dynamic>));
+    return appUser;
   }
 }

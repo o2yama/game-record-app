@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/validator.dart';
+import 'package:record_game_app/domain/app_user.dart';
 import 'package:record_game_app/screens/home_screen.dart';
-import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_model.dart';
 
 class WaitEmailVerifyScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final _signUpModel = useProvider(signUpModel);
+    final _appUser = useProvider(appUserProvider);
+    final _appUserModel = useProvider(appUserProvider.notifier);
     return Scaffold(
       appBar: AppBar(title: Text('認証メール送信中...')),
       body: SingleChildScrollView(
@@ -30,9 +31,10 @@ class WaitEmailVerifyScreen extends HookWidget {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
-                  await _signUpModel.getIsEmailVerified();
-                  if (_signUpModel.isEmailVerified) {
-                    await _signUpModel.createUserInDB();
+                  await _appUserModel.getIsEmailVerified();
+                  if (_appUserModel.isEmailVerified) {
+                    await _appUserModel.createUserInDB();
+                    print('$_appUser');
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -47,7 +49,7 @@ class WaitEmailVerifyScreen extends HookWidget {
               SizedBox(height: 40),
               Text('メールが届かない場合は'),
               TextButton(
-                onPressed: () => _signUpModel.sendEmailVerification(),
+                onPressed: () => _appUserModel.sendEmailVerification(),
                 child: Text('認証メール再送信'),
               ),
             ],

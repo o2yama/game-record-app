@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/loading_state.dart';
 import 'package:record_game_app/common/validator.dart';
+import 'package:record_game_app/screens/home_screen.dart';
 import 'package:record_game_app/screens/login_sign_up/email_field.dart';
 import 'package:record_game_app/screens/login_sign_up/password_field.dart';
 import 'package:record_game_app/common/widgets/to_home_button.dart';
@@ -13,7 +14,9 @@ import 'package:record_game_app/repository/auth_repository.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_screen.dart';
 
 class LoginScreen extends HookWidget {
-  void _onLoginButtonPressed(BuildContext context) {
+  AuthRepository get authRepository => AuthRepository.instance;
+
+  Future<void> _onLoginButtonPressed(BuildContext context) async {
     if (!Validator().validEmail(emailController.text)) {
       Validator().showValidMessage('メールアドレスをご確認ください。');
     } else if (!Validator().validPassword(passwordController.text)) {
@@ -21,19 +24,21 @@ class LoginScreen extends HookWidget {
     } else {
       context.read(loadingStateProvider.notifier).startLoading();
       try {
-        AuthRepository.instance
-            .signIn(emailController.text, passwordController.text);
+        await authRepository.signIn(
+            emailController.text, passwordController.text);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+            (_) => false);
       } on Exception catch (e) {
         final error = e.toString();
         print(error);
         showOkAlertDialog(
           context: context,
-          title: '$error',
+          title: 'ログインに失敗しました。',
         );
       }
       context.read(loadingStateProvider.notifier).endLoading();
-      // todo: ユーザーデータ取得(試合)
-      // todo: controllerのclear
     }
   }
 

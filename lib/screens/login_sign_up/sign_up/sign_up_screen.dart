@@ -1,3 +1,4 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -27,15 +28,19 @@ class SignUpScreen extends HookWidget {
       try {
         await authRepository.createUser(
             emailController.text, passwordController.text);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => WaitEmailVerifyScreen()),
+            (_) => false);
       } on Exception catch (e) {
         final error = e.toString();
         print(error);
+        showOkAlertDialog(
+          context: context,
+          title: 'ユーザー登録に失敗しました。',
+        );
       }
       context.read(loadingStateProvider.notifier).endLoading();
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => WaitEmailVerifyScreen()),
-          (_) => false);
     }
   }
 
@@ -64,52 +69,50 @@ class SignUpScreen extends HookWidget {
         ),
         body: SingleChildScrollView(
           child: Consumer(builder: (context, watch, child) {
-            return Expanded(
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 24),
-                        EmailField(controller: emailController),
-                        const SizedBox(height: 24),
-                        PasswordField(controller: passwordController),
-                        const SizedBox(height: 50),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                color: Theme.of(context).primaryColor),
-                          ),
-                          child: TextButton(
-                            onPressed: () => _onResisterButtonPressed(context),
-                            child: Text(
-                              '登録',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Theme.of(context).primaryColor,
-                              ),
+            return Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 24),
+                      EmailField(controller: emailController),
+                      const SizedBox(height: 24),
+                      PasswordField(controller: passwordController),
+                      const SizedBox(height: 50),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border:
+                              Border.all(color: Theme.of(context).primaryColor),
+                        ),
+                        child: TextButton(
+                          onPressed: () => _onResisterButtonPressed(context),
+                          child: Text(
+                            '登録',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 30),
-                        _toLoginScreenButton(context),
-                        const SizedBox(height: 300),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 30),
+                      _toLoginScreenButton(context),
+                      const SizedBox(height: 300),
+                    ],
                   ),
-                  _isLoading
-                      ? Center(
-                          child: Container(
-                            color: Colors.grey.withOpacity(0.6),
-                            child: CircularProgressIndicator(),
-                          ),
-                        )
-                      : Container(),
-                ],
-              ),
+                ),
+                _isLoading
+                    ? Center(
+                        child: Container(
+                          color: Colors.grey.withOpacity(0.6),
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : Container(),
+              ],
             );
           }),
         ),
