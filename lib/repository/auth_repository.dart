@@ -1,25 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:record_game_app/screens/login_sign_up/auth_exception.dart';
 
 class AuthRepository {
+  factory AuthRepository() => AuthRepository();
   AuthRepository._();
   static final instance = AuthRepository._();
-  factory AuthRepository() {
-    return AuthRepository();
-  }
 
   final _auth = FirebaseAuth.instance;
-  bool isLoading = false;
+  User? authUser;
 
-  Future<User?> createUser(String email, password) async {
+  Future<void> createUserInAuth(String email, String password) async {
     try {
       final result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      authUser = result.user;
       await sendEmailVerification();
-      return result.user;
     } on FirebaseAuthException catch (e) {
       throw AuthException(_convertErrorMessage(e.code));
-    } catch (e) {
-      throw e.toString();
+    } on Exception {
+      throw AuthException('不明なエラーです');
     }
   }
 
@@ -27,21 +26,34 @@ class AuthRepository {
     await _auth.currentUser!.sendEmailVerification();
   }
 
+  Future<bool> getIsEmailVerified() async {
+    final user = _auth.currentUser!;
+    await user.reload();
+    return user.emailVerified;
+  }
+
+  Future<void> getAuthUserData() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      authUser = user;
+    }
+  }
+
   Future<void> signIn(String email, String password) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-
-      if (!_auth.currentUser!.emailVerified) {
-        _auth.currentUser!.sendEmailVerification();
-        signOut();
-      }
-    } catch (e) {
-      throw e.toString();
+      final result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      authUser = result.user;
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(_convertErrorMessage(e.code));
+    } on Exception {
+      throw AuthException('不明なエラーです');
     }
   }
 
   Future<void> signOut() async {
     await _auth.signOut();
+    authUser = null;
   }
 
   String _convertErrorMessage(String errorMassage) {
@@ -64,13 +76,4 @@ class AuthRepository {
         return '不明なエラーです';
     }
   }
-}
-
-class AuthException implements Exception {
-  AuthException(this.message);
-
-  final String message;
-
-  @override
-  String toString() => message;
 }

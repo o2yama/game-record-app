@@ -19,9 +19,17 @@ class Validator {
     }
   }
 
+  bool validKeys(String key) {
+    if (key.length >= 6) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   void showValidMessage(String message) {
     Fluttertoast.showToast(
-      msg: '$message',
+      msg: message,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 2,
