@@ -1,4 +1,3 @@
-import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -6,41 +5,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/validator.dart';
 import 'package:record_game_app/common/widgets/loading_screen.dart';
+import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/screens/home_screens/home_screen.dart';
-import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_model.dart';
+import 'package:record_game_app/screens/login_sign_up/login/login_model.dart';
 import 'package:record_game_app/screens/login_sign_up/widgets/email_field.dart';
 import 'package:record_game_app/screens/login_sign_up/widgets/password_field.dart';
-import 'package:record_game_app/repository/auth_repository.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_screen.dart';
-import 'package:record_game_app/states/loading_state.dart';
+import 'package:record_game_app/screens/loading_state.dart';
 
 class LoginScreen extends HookWidget {
-  AuthRepository get authRepository => AuthRepository.instance;
+  const LoginScreen({Key? key}) : super(key: key);
 
   Future<void> _onLoginButtonPressed(BuildContext context) async {
-    if (!Validator().validEmail(emailController.text)) {
-      Validator().showValidMessage('メールアドレスをご確認ください。');
-    } else if (!Validator().validPassword(passwordController.text)) {
-      Validator().showValidMessage('パスワードは半角英数字7文字以上です。');
-    } else {
-      context.read(loadingStateProvider.notifier).startLoading();
-      try {
-        await authRepository.signIn(
-            emailController.text, passwordController.text);
-        await context.read(signUpModelProvider).getUserData();
-        context.read(loadingStateProvider.notifier).endLoading();
-        await Navigator.pushAndRemoveUntil<Widget>(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-            (_) => false);
-      } on Exception catch (e) {
-        print(e.toString());
-        await showOkAlertDialog(
-          context: context,
-          title: 'ログインに失敗しました。',
-        );
-        context.read(loadingStateProvider.notifier).endLoading();
-      }
+    context.read(loadingStateProvider.notifier).startLoading();
+    try {
+      await context
+          .read(loginModelProvider)
+          .login(emailController.text, passwordController.text);
+      await context.read(appUserStateProvider.notifier).getUserData();
+      context.read(loadingStateProvider.notifier).endLoading();
+      await Navigator.pushAndRemoveUntil<Widget>(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          (_) => false);
+    } on Exception catch (e) {
+      Validator().showValidMessage(e.toString());
+      context.read(loadingStateProvider.notifier).endLoading();
     }
   }
 
@@ -59,11 +49,13 @@ class LoginScreen extends HookWidget {
       onPressed: () {
         Navigator.pushAndRemoveUntil<Object>(
             context,
-            MaterialPageRoute(builder: (context) => SignUpScreen()),
+            MaterialPageRoute(builder: (context) => const SignUpScreen()),
             (_) => false);
       },
-      child:
-          const Text('ユーザー登録がまだの方はこちら', style: TextStyle(color: Colors.blue)),
+      child: const Text(
+        'ユーザー登録がまだの方はこちら',
+        style: TextStyle(color: Colors.blue),
+      ),
     );
   }
 
@@ -89,20 +81,14 @@ class LoginScreen extends HookWidget {
                   const SizedBox(height: 24),
                   _passwordField(context),
                   const SizedBox(height: 50),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Theme.of(context).primaryColor),
-                    ),
-                    child: TextButton(
-                      onPressed: () => _onLoginButtonPressed(context),
-                      child: Text(
-                        'ログイン',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Theme.of(context).primaryColor,
-                        ),
+                  TextButton(
+                    onPressed: () => _onLoginButtonPressed(context),
+                    child: Text(
+                      'ログイン',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   ),
@@ -112,7 +98,7 @@ class LoginScreen extends HookWidget {
                 ],
               ),
             ),
-            _isLoading ? LoadingScreen() : Container(),
+            _isLoading ? const LoadingScreen() : Container(),
           ]),
         ),
       ),

@@ -1,15 +1,15 @@
-import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:record_game_app/common/screen_size.dart';
 import 'package:record_game_app/common/validator.dart';
 import 'package:record_game_app/common/widgets/loading_screen.dart';
 import 'package:record_game_app/common/widgets/text_field_clear_button.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_model.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/wait_email_verify_screen.dart';
-import 'package:record_game_app/states/loading_state.dart';
+import 'package:record_game_app/screens/loading_state.dart';
 import '../login/login_screen.dart';
 import '../widgets/email_field.dart';
 import '../widgets/password_field.dart';
@@ -17,6 +17,8 @@ import '../widgets/password_field.dart';
 final userNameController = TextEditingController();
 
 class SignUpScreen extends HookWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
+
   //authへの登録処理 => メール認証画面へ
   Future<void> _onResisterButtonPressed(BuildContext context) async {
     context.read(loadingStateProvider.notifier).startLoading();
@@ -24,20 +26,18 @@ class SignUpScreen extends HookWidget {
       await context
           .read(signUpModelProvider)
           .createUserInAuth(emailController.text, passwordController.text);
+      context.read(loadingStateProvider.notifier).endLoading();
       await Navigator.pushAndRemoveUntil<Widget>(
         context,
         MaterialPageRoute(
-          builder: (context) => WaitEmailVerifyScreen(
-            name: userNameController.text,
-            userImage: null,
-          ),
+          builder: (context) => const WaitEmailVerifyScreen(),
         ),
         (_) => false,
       );
-    } on Exception catch (error) {
-      Validator().showValidMessage(error.toString());
+    } on Exception catch (e) {
+      Validator().showValidMessage(e.toString());
+      context.read(loadingStateProvider.notifier).endLoading();
     }
-    context.read(loadingStateProvider.notifier).endLoading();
   }
 
   Widget _emailField(BuildContext context) {
@@ -61,23 +61,20 @@ class SignUpScreen extends HookWidget {
   }
 
   Widget _userImageIcon(BuildContext context) {
-    final _signUpModel = useProvider(signUpModelProvider);
-
+    final model = useProvider(signUpModelProvider);
     return SizedBox(
-      width: MediaQuery.of(context).size.width,
+      width: ScreenSize(context).width(),
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             RawMaterialButton(
-              onPressed: () async {
-                await _signUpModel.getImage();
-              },
-              child: _signUpModel.userImage != null
+              onPressed: () async => model.getImage(),
+              child: model.userImage != null
                   ? CircleAvatar(
                       radius: 50,
-                      backgroundImage: FileImage(_signUpModel.userImage!),
+                      backgroundImage: FileImage(model.userImage!),
                       backgroundColor: Colors.grey,
                     )
                   : const CircleAvatar(
@@ -86,7 +83,7 @@ class SignUpScreen extends HookWidget {
                       backgroundColor: Colors.grey,
                     ),
             ),
-            _signUpModel.userImage != null
+            model.userImage != null
                 ? Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: TextButton(
@@ -94,7 +91,7 @@ class SignUpScreen extends HookWidget {
                         side: BorderSide.none,
                         elevation: 0,
                       ),
-                      onPressed: _signUpModel.deleteImage,
+                      onPressed: model.deleteImage,
                       child: const Text('現在の写真の削除'),
                     ),
                   )
@@ -109,7 +106,7 @@ class SignUpScreen extends HookWidget {
   }
 
   Widget _nameField(BuildContext context) {
-    final _signUpModel = useProvider(signUpModelProvider);
+    final model = useProvider(signUpModelProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -120,7 +117,7 @@ class SignUpScreen extends HookWidget {
             labelText: 'お名前',
             suffixIcon: TextFieldClearButton(controller: userNameController),
           ),
-          onChanged: (String text) => _signUpModel.serUserName,
+          onChanged: model.serUserName,
         ),
         const Text('※必須', style: TextStyle(color: Colors.red)),
       ],
@@ -147,7 +144,7 @@ class SignUpScreen extends HookWidget {
       onPressed: () {
         Navigator.pushAndRemoveUntil<Object>(
             context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
             (_) => false);
       },
       child: const Text('ユーザー登録済みの方はこちら', style: TextStyle(color: Colors.blue)),
@@ -161,7 +158,10 @@ class SignUpScreen extends HookWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
-        appBar: AppBar(title: const Text('ユーザー登録')),
+        appBar: AppBar(
+          title: const Text('ユーザー登録'),
+          centerTitle: false,
+        ),
         body: Stack(children: [
           SingleChildScrollView(
             child: Padding(
@@ -185,7 +185,7 @@ class SignUpScreen extends HookWidget {
               ),
             ),
           ),
-          _isLoading ? LoadingScreen() : Container(),
+          _isLoading ? const LoadingScreen() : Container(),
         ]),
       ),
     );

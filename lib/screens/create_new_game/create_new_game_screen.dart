@@ -5,14 +5,17 @@ import 'package:record_game_app/common/date.dart';
 import 'package:record_game_app/common/validator.dart';
 import 'package:record_game_app/common/widgets/default_text_field.dart';
 import 'package:record_game_app/common/widgets/loading_screen.dart';
-import 'package:record_game_app/states/game_state.dart';
-import 'package:record_game_app/states/loading_state.dart';
+import 'package:record_game_app/domain/app_user/app_user.dart';
+import 'package:record_game_app/screens/create_new_game/create_new_game_model.dart';
+import 'package:record_game_app/screens/loading_state.dart';
 
 final gameTitleController = TextEditingController();
 final editorKeyController = TextEditingController();
 final readerKeyController = TextEditingController();
 
 class CreateNewGameScreen extends HookWidget {
+  const CreateNewGameScreen({Key? key}) : super(key: key);
+
   Future<void> _onCreateButtonPressed(BuildContext context) async {
     if (gameTitleController.text.isEmpty) {
       Validator().showValidMessage('大会名を入力してください');
@@ -25,13 +28,13 @@ class CreateNewGameScreen extends HookWidget {
     }
   }
 
-  Widget _isMatchSwitch(BuildContext context) {
-    final _gameModel = useProvider(gameStateProvider.notifier);
+  Widget _isMatchSwitch(BuildContext context, AppUser appUser) {
+    final model = context.refresh(createNewGameModelProvider(appUser));
     return Row(children: [
       const Text('大会'),
       Switch(
-        value: _gameModel.isMatch,
-        onChanged: (bool isMatch) => _gameModel.isMatchChanged,
+        value: model.isMatch,
+        onChanged: (bool isMatch) => model.isMatchChanged,
       ),
     ]);
   }
@@ -89,9 +92,13 @@ class CreateNewGameScreen extends HookWidget {
     );
   }
 
-  Widget _heldAtDisplay(BuildContext context, DateTime? heldAt) {
+  Widget _heldAtDisplay(
+    BuildContext context,
+    AppUser appUser,
+    DateTime? heldAt,
+  ) {
     final now = DateTime.now();
-    final _gameModel = useProvider(gameStateProvider.notifier);
+    final model = context.refresh(createNewGameModelProvider(appUser));
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -102,9 +109,9 @@ class CreateNewGameScreen extends HookWidget {
             Text(
               heldAt == null
                   ? '${now.month}月 ${now.day}日 (${intToDate[now.weekday]})'
-                  : '${_gameModel.heldAt.month}月 '
-                      '${_gameModel.heldAt.day}日 '
-                      '(${intToDate[_gameModel.heldAt.weekday]})',
+                  : '${model.heldAt.month}月 '
+                      '${model.heldAt.day}日 '
+                      '(${intToDate[model.heldAt.weekday]})',
               style: Theme.of(context).textTheme.headline5,
             ),
             const SizedBox(width: 8),
@@ -115,7 +122,7 @@ class CreateNewGameScreen extends HookWidget {
                         initialDate: now,
                         firstDate: DateTime(2020),
                         lastDate: DateTime(2030))
-                    .then((pickedDate) => _gameModel.pickedHeldAt);
+                    .then((pickedDate) => model.pickedHeldAt);
               },
               child: const Text('変更'),
             )
@@ -151,7 +158,8 @@ class CreateNewGameScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _isLoading = useProvider<bool>(loadingStateProvider);
-    final _gameModel = useProvider(gameStateProvider.notifier);
+    final _appUser = useProvider(appUserStateProvider);
+    final model = useProvider(createNewGameModelProvider(_appUser));
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -164,7 +172,7 @@ class CreateNewGameScreen extends HookWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 24),
-                  _isMatchSwitch(context),
+                  _isMatchSwitch(context, _appUser),
                   const SizedBox(height: 8),
                   _gameTitleField(context),
                   const SizedBox(height: 16),
@@ -172,14 +180,14 @@ class CreateNewGameScreen extends HookWidget {
                   const SizedBox(height: 16),
                   _readerKeyField(context),
                   const SizedBox(height: 16),
-                  _heldAtDisplay(context, _gameModel.heldAt),
+                  _heldAtDisplay(context, _appUser, model.heldAt),
                   const SizedBox(height: 40),
                   _createButton(context),
                   const SizedBox(height: 200),
                 ],
               ),
             ),
-            _isLoading ? LoadingScreen() : Container(),
+            _isLoading ? const LoadingScreen() : Container(),
           ]),
         ),
       ),

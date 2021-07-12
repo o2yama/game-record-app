@@ -25,7 +25,7 @@ class SignUpLoginSelectScreen extends StatelessWidget {
                     Navigator.pushAndRemoveUntil<Widget>(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SignUpScreen(),
+                          builder: (context) => const SignUpScreen(),
                         ),
                         (route) => false);
                   },
@@ -36,7 +36,9 @@ class SignUpLoginSelectScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushAndRemoveUntil<Widget>(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(),
+                        ),
                         (route) => false);
                   },
                   child: const Text('ログイン'),

@@ -16,19 +16,13 @@ class UserRepository {
 
   Future<AppUser> createUserInDB(String name, File? userImage) async {
     var imageUrl = '';
-    try {
-      if (userImage != null) {
-        final ref =
-            _storage.ref().child('/users/${authRepository.authUser!.uid}');
-        final uploadTask = ref.putFile(userImage);
-        await uploadTask.whenComplete(() async {
-          imageUrl = await ref.getDownloadURL();
-        });
-      }
-    } on Exception catch (e) {
-      print(e);
-      final error = ArgumentError('画像のアップロードに失敗しました。');
-      throw error;
+    if (userImage != null) {
+      final ref =
+          _storage.ref().child('/users/${authRepository.authUser!.uid}');
+      final uploadTask = ref.putFile(userImage);
+      await uploadTask.whenComplete(() async {
+        imageUrl = await ref.getDownloadURL();
+      });
     }
 
     final appUser = const AppUser().copyWith(
@@ -51,11 +45,9 @@ class UserRepository {
         final appUser = AppUser.fromJson(existData).copyWith();
         return appUser;
       } else {
-        print('appUser null: $query');
         return null;
       }
     } else {
-      print('authUser: ${authRepository.authUser}');
       return null;
     }
   }

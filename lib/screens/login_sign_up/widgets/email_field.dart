@@ -4,7 +4,8 @@ import 'package:record_game_app/common/widgets/text_field_clear_button.dart';
 TextEditingController emailController = TextEditingController();
 
 class EmailField extends StatelessWidget {
-  EmailField({required this.controller});
+  const EmailField({Key? key, required this.controller}) : super(key: key);
+
   final TextEditingController controller;
 
   @override

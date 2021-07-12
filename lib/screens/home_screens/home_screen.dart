@@ -2,26 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/screens/home_screens/account_screen/account_screen.dart';
 import 'package:record_game_app/screens/home_screens/game_list_screen/game_list_screen.dart';
 import 'package:record_game_app/screens/home_screens/rehearsal_list_screen/rehearsal_list_screen.dart';
-import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_model.dart';
-import 'package:record_game_app/states/loading_state.dart';
-
+import 'package:record_game_app/screens/loading_state.dart';
 import 'favorite_games_screen/favorite_games_screen.dart';
 
 class HomeScreen extends HookWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final _loadingStateModel = useProvider(loadingStateProvider.notifier);
-    final _signUpModel = useProvider(signUpModelProvider);
+    final _appUserModel = useProvider(appUserStateProvider.notifier);
 
     Future(() async {
-      if (!_signUpModel.isFetchedUserData) {
-        _loadingStateModel.startLoading();
-        await _signUpModel.getUserData();
-        _loadingStateModel.endLoading();
-      }
+      _loadingStateModel.startLoading();
+      await _appUserModel.getUserData();
+      _loadingStateModel.endLoading();
     });
 
     return Stack(
@@ -49,22 +48,22 @@ class HomeScreen extends HookWidget {
             if (index == 0) {
               return CupertinoTabView(
                 builder: (context) =>
-                    CupertinoPageScaffold(child: GameListScreen()),
+                    const CupertinoPageScaffold(child: GameListScreen()),
               );
             } else if (index == 1) {
               return CupertinoTabView(
                 builder: (context) =>
-                    CupertinoPageScaffold(child: RehearsalListScreen()),
+                    const CupertinoPageScaffold(child: RehearsalListScreen()),
               );
             } else if (index == 2) {
               return CupertinoTabView(
                 builder: (context) =>
-                    CupertinoPageScaffold(child: FavoriteGamesScreen()),
+                    const CupertinoPageScaffold(child: FavoriteGamesScreen()),
               );
             } else if (index == 3) {
               return CupertinoTabView(
                 builder: (context) =>
-                    CupertinoPageScaffold(child: AccountScreen()),
+                    const CupertinoPageScaffold(child: AccountScreen()),
               );
             } else {
               return Container();

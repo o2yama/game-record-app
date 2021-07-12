@@ -57,15 +57,6 @@ class GameRepository {
   }
 
   Future<List<Game>> fetchFavoriteGames(AppUser appUser) async {
-    final favoriteGameList = <Game>[];
-    var favoriteGameIds = <String>[];
-    final gameQuery =
-        await _db.collection(users).doc(appUser.userId).collection(games).get();
-    final rehearsalQuery = await _db
-        .collection(users)
-        .doc(appUser.userId)
-        .collection(rehearsals)
-        .get();
-    return favoriteGameList;
+    return [];
   }
 }

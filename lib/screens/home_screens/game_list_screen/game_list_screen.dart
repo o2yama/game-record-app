@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/widgets/loading_screen.dart';
+import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/screens/create_new_game/create_new_game_screen.dart';
-import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_model.dart';
-import 'package:record_game_app/screens/team_list_screen.dart';
-import 'package:record_game_app/states/loading_state.dart';
+import 'package:record_game_app/screens/team_list_screen/team_list_screen.dart';
+import 'package:record_game_app/screens/loading_state.dart';
 
 final searchController = TextEditingController();
 
 class GameListScreen extends HookWidget {
+  const GameListScreen({Key? key}) : super(key: key);
+
   Widget _adWidget() {
     return const SizedBox(height: 50);
   }
@@ -90,7 +92,9 @@ class GameListScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _isLoading = useProvider(loadingStateProvider);
-    final _appUserModel = useProvider(signUpModelProvider);
+    final _loadingModel = useProvider(loadingStateProvider.notifier);
+    final _appUser = useProvider(appUserStateProvider);
+    final _appUserModel = useProvider(appUserStateProvider.notifier);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -100,7 +104,7 @@ class GameListScreen extends HookWidget {
           actions: [
             IconButton(
               onPressed: () async {
-                _appUserModel.authRepository.authUser!.email == ''
+                _appUser.email == ''
                     ? await showOkAlertDialog(
                         context: context,
                         title: 'ユーザー登録をして、\n試合を記録しましょう！',
@@ -109,9 +113,12 @@ class GameListScreen extends HookWidget {
                     : Navigator.push<Widget>(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CreateNewGameScreen()));
+                            builder: (context) => const CreateNewGameScreen()));
               },
-              icon: const Icon(Icons.add),
+              icon: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
             ),
           ],
         ),
@@ -120,13 +127,21 @@ class GameListScreen extends HookWidget {
             height: MediaQuery.of(context).size.height,
             child: Stack(
               children: [
-                Column(children: [
-                  const SizedBox(height: 8),
-                  _searchField(context),
-                  _gamesListView(context),
-                  _adWidget(),
-                ]),
-                _isLoading ? LoadingScreen() : Container(),
+                RefreshIndicator(
+                  onRefresh: () async {
+                    _loadingModel.startLoading();
+                    await _appUserModel.getUserData();
+                    //todo:gameの取得
+                    _loadingModel.endLoading();
+                  },
+                  child: Column(children: [
+                    const SizedBox(height: 8),
+                    _searchField(context),
+                    _gamesListView(context),
+                    _adWidget(),
+                  ]),
+                ),
+                _isLoading ? const LoadingScreen() : Container(),
               ],
             ),
           ),

@@ -4,6 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 final favoriteSearchController = TextEditingController();
 
 class FavoriteGamesScreen extends HookWidget {
+  const FavoriteGamesScreen({Key? key}) : super(key: key);
+
   Widget _searchField(BuildContext context) {
     return Row(
       children: [

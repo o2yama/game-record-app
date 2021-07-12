@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:record_game_app/states/text_visibility_state.dart';
+import 'package:record_game_app/screens/login_sign_up/text_visibility_state.dart';
 
 TextEditingController passwordController = TextEditingController();
 
 class PasswordField extends HookWidget {
-  PasswordField({required this.controller});
+  const PasswordField({Key? key, required this.controller}) : super(key: key);
   final TextEditingController controller;
 
   @override
