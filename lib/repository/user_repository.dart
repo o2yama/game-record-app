@@ -1,42 +1,62 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:record_game_app/domain/app_user.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'auth_repository.dart';
 
 class UserRepository {
+  factory UserRepository() => UserRepository();
   UserRepository._();
   static final instance = UserRepository._();
 
-  factory UserRepository() {
-    return UserRepository();
-  }
-
   AuthRepository get authRepository => AuthRepository.instance;
-  FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<bool> isExistUser() async {
-    final userQuery =
-        await _db.collection('users').doc(authRepository.user!.uid).get();
-    if (userQuery.exists) {
-      return true;
-    } else {
-      return false;
+  final _db = FirebaseFirestore.instance;
+  final _storage = FirebaseStorage.instance;
+
+  Future<AppUser> createUserInDB(String name, File? userImage) async {
+    var imageUrl = '';
+    try {
+      if (userImage != null) {
+        final ref =
+            _storage.ref().child('/users/${authRepository.authUser!.uid}');
+        final uploadTask = ref.putFile(userImage);
+        await uploadTask.whenComplete(() async {
+          imageUrl = await ref.getDownloadURL();
+        });
+      }
+    } on Exception catch (e) {
+      print(e);
+      final error = ArgumentError('画像のアップロードに失敗しました。');
+      throw error;
     }
-  }
 
-  Future<AppUser> createUserInDB() async {
-    final appUser = AppUser().copyWith(
-      userId: authRepository.user!.uid,
-      email: authRepository.user!.email!,
+    final appUser = const AppUser().copyWith(
+      userId: authRepository.authUser!.uid,
+      email: authRepository.authUser!.email!,
+      name: name,
+      imageUrl: imageUrl,
     );
     await _db.collection('users').doc(appUser.userId).set(appUser.toJson());
     return appUser;
   }
 
-  Future<AppUser> getUserData() async {
-    final query =
-        await _db.collection('users').doc(authRepository.user!.uid).get();
-    final appUser =
-        AppUser.fromJson(Map.from(query.data() as Map<String, dynamic>));
-    return appUser;
+  Future<AppUser?> getUserData() async {
+    await authRepository.getAuthUserData();
+    if (authRepository.authUser != null) {
+      final query =
+          await _db.collection('users').doc(authRepository.authUser!.uid).get();
+      if (query.exists) {
+        final existData = query.data()!;
+        final appUser = AppUser.fromJson(existData).copyWith();
+        return appUser;
+      } else {
+        print('appUser null: $query');
+        return null;
+      }
+    } else {
+      print('authUser: ${authRepository.authUser}');
+      return null;
+    }
   }
 }

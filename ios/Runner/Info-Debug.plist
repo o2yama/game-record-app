@@ -41,5 +41,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
+	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>ローカル環境からのアプリです。</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>ユーザーの写真を設定するために使用します。</string>
 </dict>
 </plist>

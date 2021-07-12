@@ -4,8 +4,7 @@ import 'package:record_game_app/common/widgets/text_field_clear_button.dart';
 TextEditingController emailController = TextEditingController();
 
 class EmailField extends StatelessWidget {
-  const EmailField({required this.controller});
-
+  EmailField({required this.controller});
   final TextEditingController controller;
 
   @override
@@ -15,8 +14,7 @@ class EmailField extends StatelessWidget {
         Expanded(
           child: TextField(
             controller: controller,
-            textAlignVertical: TextAlignVertical.top,
-            autofocus: false,
+            keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               labelText: 'メールアドレス',
               hintText: 'example@gmail.com',

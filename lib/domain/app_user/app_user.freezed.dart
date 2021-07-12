@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'app_user.dart';
 
@@ -20,10 +19,16 @@ AppUser _$AppUserFromJson(Map<String, dynamic> json) {
 class _$AppUserTearOff {
   const _$AppUserTearOff();
 
-  _AppUser call({String userId = '', String email = ''}) {
+  _AppUser call(
+      {String userId = '',
+      String email = '',
+      String name = 'unknown',
+      String? imageUrl}) {
     return _AppUser(
       userId: userId,
       email: email,
+      name: name,
+      imageUrl: imageUrl,
     );
   }
 
@@ -39,6 +44,8 @@ const $AppUser = _$AppUserTearOff();
 mixin _$AppUser {
   String get userId => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  String? get imageUrl => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -49,7 +56,7 @@ mixin _$AppUser {
 abstract class $AppUserCopyWith<$Res> {
   factory $AppUserCopyWith(AppUser value, $Res Function(AppUser) then) =
       _$AppUserCopyWithImpl<$Res>;
-  $Res call({String userId, String email});
+  $Res call({String userId, String email, String name, String? imageUrl});
 }
 
 /// @nodoc
@@ -64,6 +71,8 @@ class _$AppUserCopyWithImpl<$Res> implements $AppUserCopyWith<$Res> {
   $Res call({
     Object? userId = freezed,
     Object? email = freezed,
+    Object? name = freezed,
+    Object? imageUrl = freezed,
   }) {
     return _then(_value.copyWith(
       userId: userId == freezed
@@ -74,6 +83,14 @@ class _$AppUserCopyWithImpl<$Res> implements $AppUserCopyWith<$Res> {
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUrl: imageUrl == freezed
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -83,7 +100,7 @@ abstract class _$AppUserCopyWith<$Res> implements $AppUserCopyWith<$Res> {
   factory _$AppUserCopyWith(_AppUser value, $Res Function(_AppUser) then) =
       __$AppUserCopyWithImpl<$Res>;
   @override
-  $Res call({String userId, String email});
+  $Res call({String userId, String email, String name, String? imageUrl});
 }
 
 /// @nodoc
@@ -99,6 +116,8 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
   $Res call({
     Object? userId = freezed,
     Object? email = freezed,
+    Object? name = freezed,
+    Object? imageUrl = freezed,
   }) {
     return _then(_AppUser(
       userId: userId == freezed
@@ -109,6 +128,14 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUrl: imageUrl == freezed
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -116,7 +143,11 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_AppUser implements _AppUser {
-  const _$_AppUser({this.userId = '', this.email = ''});
+  const _$_AppUser(
+      {this.userId = '',
+      this.email = '',
+      this.name = 'unknown',
+      this.imageUrl});
 
   factory _$_AppUser.fromJson(Map<String, dynamic> json) =>
       _$_$_AppUserFromJson(json);
@@ -127,10 +158,18 @@ class _$_AppUser implements _AppUser {
   @JsonKey(defaultValue: '')
   @override
   final String email;
+  @JsonKey(defaultValue: 'unknown')
+  @override
+  final String name;
+  @override
+  final String? imageUrl;
 
   @override
   String toString() {
-    return 'AppUser(userId: $userId, email: $email)';
+    return 'AppUser(userId: $userId, '
+        'email: $email, '
+        'name: $name, '
+        'imageUrl: $imageUrl)';
   }
 
   @override
@@ -140,14 +179,21 @@ class _$_AppUser implements _AppUser {
             (identical(other.userId, userId) ||
                 const DeepCollectionEquality().equals(other.userId, userId)) &&
             (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)));
+                const DeepCollectionEquality().equals(other.email, email)) &&
+            (identical(other.name, name) ||
+                const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.imageUrl, imageUrl) ||
+                const DeepCollectionEquality()
+                    .equals(other.imageUrl, imageUrl)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(userId) ^
-      const DeepCollectionEquality().hash(email);
+      const DeepCollectionEquality().hash(email) ^
+      const DeepCollectionEquality().hash(name) ^
+      const DeepCollectionEquality().hash(imageUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -161,7 +207,11 @@ class _$_AppUser implements _AppUser {
 }
 
 abstract class _AppUser implements AppUser {
-  const factory _AppUser({String userId, String email}) = _$_AppUser;
+  const factory _AppUser(
+      {String userId,
+      String email,
+      String name,
+      String? imageUrl}) = _$_AppUser;
 
   factory _AppUser.fromJson(Map<String, dynamic> json) = _$_AppUser.fromJson;
 
@@ -169,6 +219,10 @@ abstract class _AppUser implements AppUser {
   String get userId => throw _privateConstructorUsedError;
   @override
   String get email => throw _privateConstructorUsedError;
+  @override
+  String get name => throw _privateConstructorUsedError;
+  @override
+  String? get imageUrl => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$AppUserCopyWith<_AppUser> get copyWith =>

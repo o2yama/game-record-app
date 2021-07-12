@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:record_game_app/common/loading_state.dart';
 import 'package:record_game_app/common/validator.dart';
-import 'package:record_game_app/screens/home_screen.dart';
-import 'package:record_game_app/screens/login_sign_up/email_field.dart';
-import 'package:record_game_app/screens/login_sign_up/password_field.dart';
-import 'package:record_game_app/common/widgets/to_home_button.dart';
+import 'package:record_game_app/common/widgets/loading_screen.dart';
+import 'package:record_game_app/screens/home_screens/home_screen.dart';
+import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_model.dart';
+import 'package:record_game_app/screens/login_sign_up/widgets/email_field.dart';
+import 'package:record_game_app/screens/login_sign_up/widgets/password_field.dart';
 import 'package:record_game_app/repository/auth_repository.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_screen.dart';
+import 'package:record_game_app/states/loading_state.dart';
 
 class LoginScreen extends HookWidget {
   AuthRepository get authRepository => AuthRepository.instance;
@@ -26,25 +27,35 @@ class LoginScreen extends HookWidget {
       try {
         await authRepository.signIn(
             emailController.text, passwordController.text);
-        Navigator.pushAndRemoveUntil(
+        await context.read(signUpModelProvider).getUserData();
+        context.read(loadingStateProvider.notifier).endLoading();
+        await Navigator.pushAndRemoveUntil<Widget>(
             context,
             MaterialPageRoute(builder: (context) => HomeScreen()),
             (_) => false);
       } on Exception catch (e) {
-        final error = e.toString();
-        print(error);
-        showOkAlertDialog(
+        print(e.toString());
+        await showOkAlertDialog(
           context: context,
           title: 'ログインに失敗しました。',
         );
+        context.read(loadingStateProvider.notifier).endLoading();
       }
-      context.read(loadingStateProvider.notifier).endLoading();
     }
+  }
+
+  Widget _emailField(BuildContext context) {
+    return EmailField(controller: emailController);
+  }
+
+  Widget _passwordField(BuildContext context) {
+    return PasswordField(controller: passwordController);
   }
 
   //ユーザー登録がまだだった場合サインアップページへ
   Widget _toSignUpScreenButton(BuildContext context) {
     return TextButton(
+      style: TextButton.styleFrom(elevation: 0, side: BorderSide.none),
       onPressed: () {
         Navigator.pushAndRemoveUntil<Object>(
             context,
@@ -59,57 +70,50 @@ class LoginScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _isLoading = useProvider(loadingStateProvider);
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         appBar: AppBar(
-          leading: ToHomeScreenButton(),
-          title: Text('ログイン'),
+          title: const Text('ログイン'),
+          centerTitle: false,
         ),
         body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 24),
-                    EmailField(controller: emailController),
-                    const SizedBox(height: 24),
-                    PasswordField(controller: passwordController),
-                    const SizedBox(height: 50),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border:
-                            Border.all(color: Theme.of(context).primaryColor),
-                      ),
-                      child: TextButton(
-                        onPressed: () => _onLoginButtonPressed(context),
-                        child: Text(
-                          'ログイン',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Theme.of(context).primaryColor,
-                          ),
+          child: Stack(children: [
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  const SizedBox(height: 24),
+                  _emailField(context),
+                  const SizedBox(height: 24),
+                  _passwordField(context),
+                  const SizedBox(height: 50),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Theme.of(context).primaryColor),
+                    ),
+                    child: TextButton(
+                      onPressed: () => _onLoginButtonPressed(context),
+                      child: Text(
+                        'ログイン',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 30),
-                    _toSignUpScreenButton(context),
-                    const SizedBox(height: 300),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 30),
+                  _toSignUpScreenButton(context),
+                  const SizedBox(height: 300),
+                ],
               ),
-              _isLoading
-                  ? Container(
-                      color: Colors.grey.withOpacity(0.6),
-                      child: CircularProgressIndicator(),
-                    )
-                  : Container(),
-            ],
-          ),
+            ),
+            _isLoading ? LoadingScreen() : Container(),
+          ]),
         ),
       ),
     );
