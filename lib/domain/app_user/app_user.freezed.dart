@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'app_user.dart';
 
@@ -22,7 +23,7 @@ class _$AppUserTearOff {
   _AppUser call(
       {String userId = '',
       String email = '',
-      String name = 'unknown',
+      String name = '',
       String? imageUrl}) {
     return _AppUser(
       userId: userId,
@@ -144,10 +145,7 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_AppUser implements _AppUser {
   const _$_AppUser(
-      {this.userId = '',
-      this.email = '',
-      this.name = 'unknown',
-      this.imageUrl});
+      {this.userId = '', this.email = '', this.name = '', this.imageUrl});
 
   factory _$_AppUser.fromJson(Map<String, dynamic> json) =>
       _$_$_AppUserFromJson(json);
@@ -158,7 +156,7 @@ class _$_AppUser implements _AppUser {
   @JsonKey(defaultValue: '')
   @override
   final String email;
-  @JsonKey(defaultValue: 'unknown')
+  @JsonKey(defaultValue: '')
   @override
   final String name;
   @override
@@ -166,10 +164,7 @@ class _$_AppUser implements _AppUser {
 
   @override
   String toString() {
-    return 'AppUser(userId: $userId, '
-        'email: $email, '
-        'name: $name, '
-        'imageUrl: $imageUrl)';
+    return 'AppUser(userId: $userId, email: $email, name: $name, imageUrl: $imageUrl)';
   }
 
   @override

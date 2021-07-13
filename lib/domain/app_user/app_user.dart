@@ -11,7 +11,7 @@ abstract class AppUser with _$AppUser {
   const factory AppUser({
     @Default('') String userId,
     @Default('') String email,
-    @Default('unknown') String name,
+    @Default('') String name,
     String? imageUrl,
   }) = _AppUser;
 

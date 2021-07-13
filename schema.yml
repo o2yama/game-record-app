@@ -7,12 +7,16 @@ users:
   tokens: #documentのIDとToken統一
     token: String
 
-  games:
+  games: #docmentIdとgameId統一
     gameId: String
     isFavorite: bool
-    isMatch: bool
 
-games:
+  rehearsals:
+    rehearsalId: String
+    isFavorite: bool
+
+matches:
+rehearsals:
   gameId: String
   gameTitle: String
   heldAt: Timestamp
@@ -31,18 +35,19 @@ games:
     players:
       playerId: String
       name: String
+      grade: int #学年
 
-    fx:
-      fxId: String #playerIdと一緒
-      d: num
-      e: num
-      nd: num
-      total: num
-    ph:
-    sr:
-    vt:
-    pb:
-    hb:
+      fx:
+        scoreId: String #playerIdと一緒
+        d: num
+        e: num
+        nd: num
+        total: num
+      ph:
+      sr:
+      vt:
+      pb:
+      hb:
 
 
 

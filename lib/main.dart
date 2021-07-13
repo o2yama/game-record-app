@@ -33,16 +33,13 @@ class MyApp extends HookWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        inputDecorationTheme: const InputDecorationTheme(
-          fillColor: Colors.grey,
-        ),
+        inputDecorationTheme:
+            const InputDecorationTheme(fillColor: Colors.grey),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             primary: Colors.purpleAccent,
             textStyle: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+                color: Colors.white, fontWeight: FontWeight.bold),
             shape: const StadiumBorder(),
             elevation: 10,
           ),
@@ -51,19 +48,18 @@ class MyApp extends HookWidget {
           style: TextButton.styleFrom(
             backgroundColor: Colors.white,
             textStyle: const TextStyle(
-              color: Colors.purple,
-              fontStyle: FontStyle.italic,
-            ),
+                color: Colors.purple, fontStyle: FontStyle.italic),
             shape: RoundedRectangleBorder(
-              side: const BorderSide(width: 1, color: Colors.purple),
-              borderRadius: BorderRadius.circular(10),
-            ),
+                side: const BorderSide(width: 1, color: Colors.purple),
+                borderRadius: BorderRadius.circular(10)),
             elevation: 10,
           ),
         ),
         primaryColor: Colors.purple,
         accentColor: Colors.purpleAccent,
         backgroundColor: Colors.grey[200],
+        iconTheme: const IconThemeData(color: Colors.white, size: 20),
+        appBarTheme: const AppBarTheme(centerTitle: false),
       ),
       home: AnimatedSplashScreen(
         splash: 'images/icon.png',

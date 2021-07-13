@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/widgets/loading_screen.dart';
+import 'package:record_game_app/domain/game/game.dart';
 import 'package:record_game_app/screens/create_new_game/create_new_game_screen.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_model.dart';
 import 'package:record_game_app/screens/loading_state.dart';
 import '../../team_list_screen/team_list_screen.dart';
 
-final _searchController = TextEditingController();
+final _searchRehearsalController = TextEditingController();
 
 class RehearsalListScreen extends HookWidget {
   const RehearsalListScreen({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class RehearsalListScreen extends HookWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
               child: TextField(
-                controller: _searchController,
+                controller: _searchRehearsalController,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
                   hintText: 'チェック名で検索',
@@ -39,9 +40,9 @@ class RehearsalListScreen extends HookWidget {
         ),
         IconButton(
           onPressed: () {
-            final textLength = _searchController.text.length - 1;
-            _searchController.text =
-                _searchController.text.substring(0, textLength);
+            final textLength = _searchRehearsalController.text.length - 1;
+            _searchRehearsalController.text =
+                _searchRehearsalController.text.substring(0, textLength);
           },
           icon: const Icon(Icons.backspace, color: Colors.grey),
         ),
@@ -51,31 +52,27 @@ class RehearsalListScreen extends HookWidget {
 
   Widget _rehearsalsListView(BuildContext context) {
     return Expanded(
-      child: ListView(children: [
-        _gameTile(context, 'インカレチェック１', DateTime.utc(2021, 8, 30)),
-        _gameTile(context, 'インカレチェック２', DateTime.utc(2021, 8, 31)),
-        _gameTile(context, '新人戦チェック', DateTime.utc(2021, 10, 1)),
-      ]),
+      child: ListView(),
     );
   }
 
-  Widget _gameTile(BuildContext context, String title, DateTime createdAt) {
+  Widget _gameTile(BuildContext context, Game game) {
     return ListTile(
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '${createdAt.month}/${createdAt.day}',
+            '${game.heldAt!.month}/${game.heldAt!.day}',
             textAlign: TextAlign.center,
           ),
         ],
       ),
-      title: Text(title, style: Theme.of(context).textTheme.headline6),
+      title: Text(game.gameTitle, style: Theme.of(context).textTheme.headline6),
       onTap: () {
         Navigator.push<Widget>(
             context,
             MaterialPageRoute(
-                builder: (context) => TeamListScreen(gameTitle: title)));
+                builder: (context) => TeamListScreen(game: game)));
       },
     );
   }
@@ -128,5 +125,64 @@ class RehearsalListScreen extends HookWidget {
         ),
       ),
     );
+  }
+}
+
+class RehearsalListView extends HookWidget {
+  const RehearsalListView({Key? key}) : super(key: key);
+
+  Widget _adWidget() {
+    return SizedBox(
+      height: 50,
+      child: Container(
+        color: Colors.pink,
+      ),
+    );
+  }
+
+  Widget _searchField(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 24, right: 8, left: 8),
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(right: 8, left: 8),
+          child: TextField(
+            controller: _searchRehearsalController,
+            keyboardType: TextInputType.text,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: '試合名で検索',
+              hintStyle: TextStyle(color: Colors.black38),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _matchTile(BuildContext context, Game game) {
+    return ListTile(
+      onTap: () => Navigator.push<Widget>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TeamListScreen(game: game),
+          )),
+      leading: Text(
+        '${game.heldAt!.month}/${game.heldAt!.day}',
+        textAlign: TextAlign.center,
+      ),
+      title: Text(game.gameTitle, style: Theme.of(context).textTheme.headline6),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
   }
 }

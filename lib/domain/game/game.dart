@@ -12,7 +12,6 @@ abstract class Game with _$Game {
     DateTime? heldAt,
     @Default('') String editorKey,
     @Default('') String readerKey,
-    @Default(true) bool isMatch,
     @Default(<String>[]) List<String> editorIds,
     @Default(<String>[]) List<String> readerIds,
   }) = _Game;
