@@ -5,12 +5,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/screens/home_screens/account_screen/account_screen.dart';
 import 'package:record_game_app/screens/home_screens/rehearsal_list_screen/rehearsal_list_screen.dart';
-import 'package:record_game_app/screens/loading_state.dart';
+import 'package:record_game_app/common/loading_state.dart';
 import 'favorite_games_screen/favorite_games_screen.dart';
 import 'match_list_screen/match_list_screen.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  static Route<Widget> route() {
+    return MaterialPageRoute<Widget>(builder: (_) => const HomeScreen());
+  }
 
   @override
   Widget build(BuildContext context) {

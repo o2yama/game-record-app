@@ -17,8 +17,6 @@ class GameRepository {
   UserRepository get userRepository => UserRepository.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<void> createNewGame() async {}
-
   Future<List<Game>> fetchMatches(AppUser appUser) async {
     final matchList = <Game>[];
     final matchQuery = await _db
@@ -41,6 +39,8 @@ class GameRepository {
     }
     return matchList;
   }
+
+  Future<void> setMatch() async {}
 
   Future<List<Game>> fetchRehearsals(AppUser appUser) async {
     final rehearsalList = <Game>[];

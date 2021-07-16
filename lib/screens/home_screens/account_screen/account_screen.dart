@@ -1,39 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:record_game_app/common/restart_widget.dart';
+import 'package:record_game_app/common/widgets/restart_widget.dart';
 import 'package:record_game_app/common/widgets/loading_screen.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
-import 'package:record_game_app/screens/loading_state.dart';
+import 'package:record_game_app/common/loading_state.dart';
 
 class AccountScreen extends HookWidget {
   const AccountScreen({Key? key}) : super(key: key);
 
+  static Route<dynamic> route() {
+    return MaterialPageRoute<Widget>(builder: (_) => const AccountScreen());
+  }
+
   Widget accountTile(
       BuildContext context, String name, String email, String? imageUrl) {
     return SizedBox(
-      height: 100,
+      height: 80,
       child: ListTile(
         onTap: () {
           //todo:アカウント情報の変更
         },
-        leading: Container(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.black,
-          ),
-          child: imageUrl!.isNotEmpty
-              ? CircleAvatar(
-                  radius: 40,
-                  backgroundImage: NetworkImage(imageUrl),
-                  backgroundColor: Colors.grey,
-                )
-              : const CircleAvatar(
-                  radius: 40,
-                  backgroundImage: AssetImage('images/account.png'),
-                  backgroundColor: Colors.grey,
-                ),
-        ),
+        leading: imageUrl!.isNotEmpty
+            ? CircleAvatar(
+                radius: 50,
+                backgroundImage: NetworkImage(imageUrl),
+                backgroundColor: Colors.grey,
+              )
+            : const CircleAvatar(
+                radius: 50,
+                backgroundImage: AssetImage('images/account.png'),
+                backgroundColor: Colors.grey,
+              ),
         title: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,

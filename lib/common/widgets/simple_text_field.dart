@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:record_game_app/common/widgets/text_field_clear_button.dart';
 
-class DefaultTextField extends StatelessWidget {
-  const DefaultTextField({
+class SimpleTextField extends StatelessWidget {
+  const SimpleTextField({
     Key? key,
     required this.controller,
     required this.hintText,

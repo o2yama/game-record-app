@@ -3,22 +3,27 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/date.dart';
 import 'package:record_game_app/common/validator.dart';
-import 'package:record_game_app/common/widgets/default_text_field.dart';
+import 'package:record_game_app/common/widgets/simple_text_field.dart';
 import 'package:record_game_app/common/widgets/loading_screen.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
-import 'package:record_game_app/screens/create_new_game/create_new_game_model.dart';
-import 'package:record_game_app/screens/loading_state.dart';
+import 'package:record_game_app/common/loading_state.dart';
+import 'create_new_rehearsal_model.dart';
 
-final gameTitleController = TextEditingController();
+final matchTitleController = TextEditingController();
 final editorKeyController = TextEditingController();
 final readerKeyController = TextEditingController();
 
-class CreateNewGameScreen extends HookWidget {
-  const CreateNewGameScreen({Key? key}) : super(key: key);
+class CreateNewRehearsalScreen extends HookWidget {
+  const CreateNewRehearsalScreen({Key? key}) : super(key: key);
+
+  static Route<Widget> route() {
+    return MaterialPageRoute<Widget>(
+        builder: (_) => const CreateNewRehearsalScreen());
+  }
 
   Future<void> _onCreateButtonPressed(BuildContext context) async {
-    if (gameTitleController.text.isEmpty) {
-      Validator().showValidMessage('大会名を入力してください');
+    if (matchTitleController.text.isEmpty) {
+      Validator().showValidMessage('試技会のタイトルを入力してください');
     } else if (!Validator().validKeys(editorKeyController.text)) {
       Validator().showValidMessage('編集者用パスワードは6文字以上です。');
     } else if (!Validator().validKeys(readerKeyController.text)) {
@@ -28,27 +33,16 @@ class CreateNewGameScreen extends HookWidget {
     }
   }
 
-  Widget _isMatchSwitch(BuildContext context, AppUser appUser) {
-    final model = context.refresh(createNewGameModelProvider(appUser));
-    return Row(children: [
-      const Text('大会'),
-      Switch(
-        value: model.isMatch,
-        onChanged: (bool isMatch) => model.isMatchChanged,
-      ),
-    ]);
-  }
-
-  Widget _gameTitleField(BuildContext context) {
+  Widget _rehearsalTitleField(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('大会名 or 試技会タイトル', style: Theme.of(context).textTheme.headline6),
+          Text('試技会タイトル', style: Theme.of(context).textTheme.headline6),
           const SizedBox(height: 8),
-          DefaultTextField(
-              controller: gameTitleController, hintText: '例) 新人戦チェック')
+          SimpleTextField(
+              controller: matchTitleController, hintText: '例) 新人戦チェック')
         ],
       ),
     );
@@ -67,7 +61,7 @@ class CreateNewGameScreen extends HookWidget {
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 8),
-          DefaultTextField(controller: editorKeyController, hintText: '6文字以上'),
+          SimpleTextField(controller: editorKeyController, hintText: '6文字以上'),
         ],
       ),
     );
@@ -86,7 +80,7 @@ class CreateNewGameScreen extends HookWidget {
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 8),
-          DefaultTextField(controller: readerKeyController, hintText: '6文字以上'),
+          SimpleTextField(controller: readerKeyController, hintText: '6文字以上'),
         ],
       ),
     );
@@ -98,7 +92,7 @@ class CreateNewGameScreen extends HookWidget {
     DateTime? heldAt,
   ) {
     final now = DateTime.now();
-    final model = context.refresh(createNewGameModelProvider(appUser));
+    final model = context.refresh(createNewRehearsalModelProvider(appUser));
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -159,12 +153,12 @@ class CreateNewGameScreen extends HookWidget {
   Widget build(BuildContext context) {
     final _isLoading = useProvider<bool>(loadingStateProvider);
     final _appUser = useProvider(appUserStateProvider);
-    final model = useProvider(createNewGameModelProvider(_appUser));
+    final model = useProvider(createNewRehearsalModelProvider(_appUser));
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
-        appBar: AppBar(title: const Text('新規記録作成')),
+        appBar: AppBar(title: const Text('大会記録の新規作成')),
         body: SingleChildScrollView(
           child: Stack(children: [
             Padding(
@@ -172,9 +166,7 @@ class CreateNewGameScreen extends HookWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 24),
-                  _isMatchSwitch(context, _appUser),
-                  const SizedBox(height: 8),
-                  _gameTitleField(context),
+                  _rehearsalTitleField(context),
                   const SizedBox(height: 16),
                   _editorKeyField(context),
                   const SizedBox(height: 16),

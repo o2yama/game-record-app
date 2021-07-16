@@ -3,78 +3,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:record_game_app/common/widgets/ad_widget.dart';
 import 'package:record_game_app/common/widgets/loading_screen.dart';
+import 'package:record_game_app/common/widgets/search_text_field.dart';
 import 'package:record_game_app/domain/game/game.dart';
-import 'package:record_game_app/screens/create_new_game/create_new_game_screen.dart';
+import 'package:record_game_app/screens/create_new_rehearsal/create_new_rehearsal_screen.dart';
+import 'package:record_game_app/screens/game_detail_screen/game_detail_argument.dart';
+import 'package:record_game_app/screens/game_detail_screen/game_detail_screen.dart';
+import 'package:record_game_app/screens/home_screens/rehearsal_list_screen/rehearsal_list_state.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_model.dart';
-import 'package:record_game_app/screens/loading_state.dart';
-import '../../team_list_screen/team_list_screen.dart';
+import 'package:record_game_app/common/loading_state.dart';
 
-final _searchRehearsalController = TextEditingController();
+final _rehearsalController = TextEditingController();
 
 class RehearsalListScreen extends HookWidget {
   const RehearsalListScreen({Key? key}) : super(key: key);
 
-  Widget _searchField(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-              child: TextField(
-                controller: _searchRehearsalController,
-                keyboardType: TextInputType.text,
-                decoration: const InputDecoration(
-                  hintText: 'チェック名で検索',
-                  hintStyle: TextStyle(color: Colors.black38),
-                ),
-              ),
-            ),
-          ),
-        ),
-        IconButton(
-          onPressed: () {
-            final textLength = _searchRehearsalController.text.length - 1;
-            _searchRehearsalController.text =
-                _searchRehearsalController.text.substring(0, textLength);
-          },
-          icon: const Icon(Icons.backspace, color: Colors.grey),
-        ),
-      ],
-    );
-  }
-
-  Widget _rehearsalsListView(BuildContext context) {
-    return Expanded(
-      child: ListView(),
-    );
-  }
-
-  Widget _gameTile(BuildContext context, Game game) {
-    return ListTile(
-      leading: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            '${game.heldAt!.month}/${game.heldAt!.day}',
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-      title: Text(game.gameTitle, style: Theme.of(context).textTheme.headline6),
-      onTap: () {
-        Navigator.push<Widget>(
-            context,
-            MaterialPageRoute(
-                builder: (context) => TeamListScreen(game: game)));
-      },
-    );
+  static Route<dynamic> route() {
+    return MaterialPageRoute<Widget>(
+        builder: (_) => const RehearsalListScreen());
   }
 
   @override
@@ -96,33 +43,17 @@ class RehearsalListScreen extends HookWidget {
                         title: 'ユーザー登録をして、\n試合を記録しましょう！',
                         message: 'アカウントページより\n新規登録、ログインできます。',
                       )
-                    : Navigator.push<Widget>(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CreateNewGameScreen()));
+                    : Navigator.of(context)
+                        .push<Widget>(CreateNewRehearsalScreen.route());
               },
-              icon: const Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
+              icon: const Icon(Icons.add, color: Colors.white),
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: Stack(
-              children: [
-                Column(children: [
-                  const SizedBox(height: 8),
-                  _searchField(context),
-                  _rehearsalsListView(context),
-                ]),
-                _isLoading ? const LoadingScreen() : Container(),
-              ],
-            ),
-          ),
-        ),
+        body: Stack(children: [
+          const RehearsalListView(),
+          _isLoading ? const LoadingScreen() : Container(),
+        ]),
       ),
     );
   }
@@ -131,58 +62,70 @@ class RehearsalListScreen extends HookWidget {
 class RehearsalListView extends HookWidget {
   const RehearsalListView({Key? key}) : super(key: key);
 
-  Widget _adWidget() {
-    return SizedBox(
-      height: 50,
-      child: Container(
-        color: Colors.pink,
-      ),
-    );
-  }
-
   Widget _searchField(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 24, right: 8, left: 8),
-      child: Container(
-        height: 50,
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(right: 8, left: 8),
-          child: TextField(
-            controller: _searchRehearsalController,
-            keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              hintText: '試合名で検索',
-              hintStyle: TextStyle(color: Colors.black38),
-            ),
-          ),
-        ),
+      padding: const EdgeInsets.all(8),
+      child: SearchTextField(
+        controller: _rehearsalController,
+        hintText: 'チェック名で検索',
       ),
     );
   }
 
-  Widget _matchTile(BuildContext context, Game game) {
-    return ListTile(
-      onTap: () => Navigator.push<Widget>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TeamListScreen(game: game),
-          )),
-      leading: Text(
-        '${game.heldAt!.month}/${game.heldAt!.day}',
-        textAlign: TextAlign.center,
+  Widget _rehearsalTile(BuildContext context, Game game, bool isLast) {
+    return Column(children: [
+      ListTile(
+        onTap: () => Navigator.of(context).push<Widget>(
+          GameDetailScreen.route(
+              gameDetailArgument: GameDetailArgument(game: game)),
+        ),
+        leading: Text(
+          '${game.heldAt!.month}/${game.heldAt!.day}',
+          textAlign: TextAlign.center,
+        ),
+        title: Text(
+          game.gameTitle,
+          style: Theme.of(context).textTheme.headline6,
+        ),
       ),
-      title: Text(game.gameTitle, style: Theme.of(context).textTheme.headline6),
-    );
+      isLast ? const AdWidget() : Container(),
+    ]);
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    final _loadingStateModel = useProvider(loadingStateProvider.notifier);
+    final _rehearsalListModel =
+        useProvider(rehearsalListStateProvider.notifier);
+    final _rehearsalList = useProvider(rehearsalListStateProvider);
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        _loadingStateModel.startLoading();
+        await _rehearsalListModel.fetchRehearsals();
+        _loadingStateModel.endLoading();
+      },
+      child: _rehearsalList.isEmpty
+          ? Column(children: [
+              _searchField(context),
+              const Expanded(child: SizedBox()),
+              const AdWidget(),
+            ])
+          : Column(children: [
+              _searchField(context),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _rehearsalList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return _rehearsalTile(
+                      context,
+                      _rehearsalList[index],
+                      index == _rehearsalList.length - 1,
+                    );
+                  },
+                ),
+              ),
+            ]),
+    );
   }
 }

@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:uuid/uuid.dart';
 
-final createNewGameModelProvider = ChangeNotifierProvider.family(
-    (ref, AppUser appUser) => CreateNewGameModel(appUser: appUser));
+final createNewMatchModelProvider = ChangeNotifierProvider.family(
+    (ref, AppUser appUser) => CreateNewMatchModel(appUser: appUser));
 
-class CreateNewGameModel extends ChangeNotifier {
-  CreateNewGameModel({required this.appUser});
+class CreateNewMatchModel extends ChangeNotifier {
+  CreateNewMatchModel({required this.appUser});
   final AppUser appUser;
 
   final uuid = const Uuid().v4();

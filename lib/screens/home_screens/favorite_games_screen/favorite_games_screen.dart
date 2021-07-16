@@ -1,43 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:record_game_app/common/widgets/search_text_field.dart';
 
 final favoriteSearchController = TextEditingController();
 
 class FavoriteGamesScreen extends HookWidget {
   const FavoriteGamesScreen({Key? key}) : super(key: key);
 
+  static Route<dynamic> route() {
+    return MaterialPageRoute<Widget>(
+        builder: (_) => const FavoriteGamesScreen());
+  }
+
   Widget _searchField(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-              child: TextField(
-                controller: favoriteSearchController,
-                keyboardType: TextInputType.text,
-                decoration: const InputDecoration(
-                  hintText: '試合名、チェック名で検索',
-                  hintStyle: TextStyle(color: Colors.black38),
-                ),
-              ),
-            ),
-          ),
-        ),
-        IconButton(
-          onPressed: () {
-            final textLength = favoriteSearchController.text.length - 1;
-            favoriteSearchController.text =
-                favoriteSearchController.text.substring(0, textLength);
-          },
-          icon: const Icon(Icons.backspace, color: Colors.grey),
-        ),
-      ],
+    return SearchTextField(
+      controller: favoriteSearchController,
+      hintText: '試合名、チェック名で検索',
     );
   }
 
