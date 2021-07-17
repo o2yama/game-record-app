@@ -15,7 +15,6 @@ _$_Game _$_$_GameFromJson(Map<String, dynamic> json) {
         : DateTime.parse(json['heldAt'] as String),
     editorKey: json['editorKey'] as String? ?? '',
     readerKey: json['readerKey'] as String? ?? '',
-    isMatch: json['isMatch'] as bool? ?? true,
     editorIds: (json['editorIds'] as List<dynamic>?)
             ?.map((dynamic e) => e as String)
             .toList() ??
@@ -33,7 +32,6 @@ Map<String, dynamic> _$_$_GameToJson(_$_Game instance) => <String, dynamic>{
       'heldAt': instance.heldAt?.toIso8601String(),
       'editorKey': instance.editorKey,
       'readerKey': instance.readerKey,
-      'isMatch': instance.isMatch,
       'editorIds': instance.editorIds,
       'readerIds': instance.readerIds,
     };

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
+import 'package:record_game_app/domain/game/game.dart';
+import 'package:record_game_app/repository/game_repository.dart';
 import 'package:uuid/uuid.dart';
 
 final createNewMatchModelProvider = ChangeNotifierProvider.family(
@@ -9,24 +11,27 @@ final createNewMatchModelProvider = ChangeNotifierProvider.family(
 class CreateNewMatchModel extends ChangeNotifier {
   CreateNewMatchModel({required this.appUser});
   final AppUser appUser;
+  GameRepository get gameRepository => GameRepository.instance;
 
-  final uuid = const Uuid().v4();
+  String get getUuid => const Uuid().v4();
 
-  String gameId = '';
-  String gameTitle = '';
-  DateTime heldAt = DateTime.now();
-  String editorKey = '';
-  String readerKey = '';
-  bool isMatch = false;
-  List<String> editorIds = [];
-  List<String> readerIds = [];
-
-  void pickedHeldAt(DateTime heldAt) {
-    this.heldAt = heldAt;
-    notifyListeners();
+  Future<void> createNewMatch(
+      {required String gameTitle,
+      required String editorKey,
+      required String readerKey,
+      required DateTime heldAt}) async {
+    final newId = getUuid;
+    final newGame = const Game().copyWith(
+      gameId: newId,
+      gameTitle: gameTitle,
+      heldAt: heldAt,
+      editorKey: editorKey,
+      readerKey: readerKey,
+      editorIds: [appUser.userId],
+      readerIds: [],
+    );
+    await gameRepository.createNewMatch(appUser, newGame);
   }
 
-  void get isMatchChanged => isMatch;
-
-  Future<void> createNewGame() async {}
+  Future<void> deleteMatch() async {}
 }

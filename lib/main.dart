@@ -1,7 +1,9 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/widgets/restart_widget.dart';
@@ -32,6 +34,16 @@ class MyApp extends HookWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '試合記録アプリ',
+      locale: const Locale('ja', 'JP'),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('ja', 'JP'),
+      ],
       home: AnimatedSplashScreen(
         splash: 'images/icon.png',
         backgroundColor: Colors.white,
@@ -41,7 +53,7 @@ class MyApp extends HookWidget {
           future: _appUserModel.getUserData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Scaffold(body: LoadingScreen());
+              return Scaffold(body: LoadingScreen(context));
             } else if (snapshot.data == null) {
               return const SignUpLoginSelectScreen();
             } else {
@@ -64,9 +76,10 @@ class MyApp extends HookWidget {
             backgroundColor: Colors.white,
             textStyle: const TextStyle(color: Colors.purple),
             shape: RoundedRectangleBorder(
-                side: const BorderSide(width: 1, color: Colors.purple),
-                borderRadius: BorderRadius.circular(10)),
-            elevation: 10,
+              side: BorderSide.none,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            elevation: 5,
           ),
         ),
         primaryColor: Colors.purple,

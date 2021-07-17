@@ -82,7 +82,7 @@ class WaitEmailVerifyScreen extends HookWidget {
             ],
           ),
         ),
-        _isLoading ? const LoadingScreen() : Container(),
+        _isLoading ? LoadingScreen(context) : Container(),
       ]),
     );
   }

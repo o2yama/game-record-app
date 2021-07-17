@@ -6,7 +6,6 @@ import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/screens/home_screens/account_screen/account_screen.dart';
 import 'package:record_game_app/screens/home_screens/rehearsal_list_screen/rehearsal_list_screen.dart';
 import 'package:record_game_app/common/loading_state.dart';
-import 'favorite_games_screen/favorite_games_screen.dart';
 import 'match_list_screen/match_list_screen.dart';
 
 class HomeScreen extends HookWidget {
@@ -38,10 +37,6 @@ class HomeScreen extends HookWidget {
           label: '試技会',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_border_rounded),
-          label: 'お気に入り',
-        ),
-        BottomNavigationBarItem(
           icon: Icon(Icons.account_circle_rounded),
           label: 'アカウント',
         ),
@@ -58,11 +53,6 @@ class HomeScreen extends HookWidget {
                 const CupertinoPageScaffold(child: RehearsalListScreen()),
           );
         } else if (index == 2) {
-          return CupertinoTabView(
-            builder: (context) =>
-                const CupertinoPageScaffold(child: FavoriteGamesScreen()),
-          );
-        } else if (index == 3) {
           return CupertinoTabView(
             builder: (context) =>
                 const CupertinoPageScaffold(child: AccountScreen()),

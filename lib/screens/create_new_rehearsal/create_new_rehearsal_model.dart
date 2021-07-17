@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
+import 'package:record_game_app/domain/game/game.dart';
+import 'package:record_game_app/repository/game_repository.dart';
 import 'package:uuid/uuid.dart';
 
 final createNewRehearsalModelProvider = ChangeNotifierProvider.family(
@@ -8,22 +10,26 @@ final createNewRehearsalModelProvider = ChangeNotifierProvider.family(
 
 class CreateNewRehearsalModel extends ChangeNotifier {
   CreateNewRehearsalModel({required this.appUser});
-
   final AppUser appUser;
-  final uuid = const Uuid().v4();
+  GameRepository get gameRepository => GameRepository.instance;
 
-  String gameId = '';
-  String gameTitle = '';
-  DateTime heldAt = DateTime.now();
-  String editorKey = '';
-  String readerKey = '';
-  List<String> editorIds = [];
-  List<String> readerIds = [];
+  String get getUuid => const Uuid().v4();
 
-  void pickedHeldAt(DateTime heldAt) {
-    this.heldAt = heldAt;
-    notifyListeners();
+  Future<void> createNewRehearsal(
+      {required String gameTitle,
+      required String editorKey,
+      required String readerKey,
+      required DateTime heldAt}) async {
+    final newId = getUuid;
+    final newGame = const Game().copyWith(
+      gameId: newId,
+      gameTitle: gameTitle,
+      heldAt: heldAt,
+      editorKey: editorKey,
+      readerKey: readerKey,
+      editorIds: [appUser.userId],
+      readerIds: [],
+    );
+    await gameRepository.createNewRehearsal(appUser, newGame);
   }
-
-  Future<void> createNewGame() async {}
 }

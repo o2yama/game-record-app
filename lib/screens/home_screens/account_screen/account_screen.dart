@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:record_game_app/common/widgets/ad_widget.dart';
+import 'package:record_game_app/common/widgets/large_image/large_image_screen.dart';
+import 'package:record_game_app/common/widgets/large_image/large_image_state.dart';
 import 'package:record_game_app/common/widgets/restart_widget.dart';
 import 'package:record_game_app/common/widgets/loading_screen.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
@@ -22,10 +25,14 @@ class AccountScreen extends HookWidget {
           //todo:アカウント情報の変更
         },
         leading: imageUrl!.isNotEmpty
-            ? CircleAvatar(
-                radius: 50,
-                backgroundImage: NetworkImage(imageUrl),
-                backgroundColor: Colors.grey,
+            ? GestureDetector(
+                onTap: () =>
+                    context.read(largeImageStateProvider.notifier).toBig(),
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(imageUrl),
+                  backgroundColor: Colors.grey,
+                ),
               )
             : const CircleAvatar(
                 radius: 50,
@@ -75,7 +82,9 @@ class AccountScreen extends HookWidget {
               ),
             ]),
           ),
-          _isLoading ? const LoadingScreen() : Container(),
+          const AdWidget(),
+          LargeImageScreen(imageUrl: _appUser.imageUrl!),
+          _isLoading ? LoadingScreen(context) : Container(),
         ],
       ),
     );

@@ -6,7 +6,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/screen_size.dart';
 import 'package:record_game_app/common/validator.dart';
 import 'package:record_game_app/common/widgets/loading_screen.dart';
-import 'package:record_game_app/common/widgets/text_field_clear_button.dart';
 import 'package:record_game_app/screens/login_sign_up/login/login_screen.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_model.dart';
 import 'package:record_game_app/common/loading_state.dart';
@@ -114,10 +113,7 @@ class SignUpScreen extends HookWidget {
         TextField(
           controller: userNameController,
           keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-            labelText: 'お名前',
-            suffixIcon: TextFieldClearButton(controller: userNameController),
-          ),
+          decoration: const InputDecoration(labelText: 'お名前'),
           onChanged: model.serUserName,
         ),
         const Text('※必須', style: TextStyle(color: Colors.red)),
@@ -184,7 +180,7 @@ class SignUpScreen extends HookWidget {
               ),
             ),
           ),
-          _isLoading ? const LoadingScreen() : Container(),
+          _isLoading ? LoadingScreen(context) : Container(),
         ]),
       ),
     );

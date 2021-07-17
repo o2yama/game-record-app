@@ -7,13 +7,11 @@ users:
   tokens: #documentのIDとToken統一
     token: String
 
-  games: #docmentIdとgameId統一
-    gameId: String
-    isFavorite: bool
+  matchIds: #docmentIdとmatchId統一
+    matchId: String
 
-  rehearsals:
+  rehearsalIds:
     rehearsalId: String
-    isFavorite: bool
 
 matches:
 rehearsals:
@@ -22,7 +20,6 @@ rehearsals:
   heldAt: Timestamp
   editorKey: String #6文字以上
   readerKey: String #6文字以上
-  isMatch: bool
   editorIds: [String]  #editorのuserIdリスト
   readerIds: [String] #readerのuserIdリスト
 

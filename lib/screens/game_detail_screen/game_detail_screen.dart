@@ -18,7 +18,12 @@ class GameDetailScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(gameArgument.game.gameTitle)),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('${gameArgument.game.gameTitle}'
+            '(${gameArgument.game.heldAt!.month}/'
+            '${gameArgument.game.heldAt!.day})'),
+      ),
       body: Container(),
     );
   }

@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'game.dart';
 
@@ -26,7 +25,6 @@ class _$GameTearOff {
       DateTime? heldAt,
       String editorKey = '',
       String readerKey = '',
-      bool isMatch = true,
       List<String> editorIds = const <String>[],
       List<String> readerIds = const <String>[]}) {
     return _Game(
@@ -35,7 +33,6 @@ class _$GameTearOff {
       heldAt: heldAt,
       editorKey: editorKey,
       readerKey: readerKey,
-      isMatch: isMatch,
       editorIds: editorIds,
       readerIds: readerIds,
     );
@@ -56,7 +53,6 @@ mixin _$Game {
   DateTime? get heldAt => throw _privateConstructorUsedError;
   String get editorKey => throw _privateConstructorUsedError;
   String get readerKey => throw _privateConstructorUsedError;
-  bool get isMatch => throw _privateConstructorUsedError;
   List<String> get editorIds => throw _privateConstructorUsedError;
   List<String> get readerIds => throw _privateConstructorUsedError;
 
@@ -75,7 +71,6 @@ abstract class $GameCopyWith<$Res> {
       DateTime? heldAt,
       String editorKey,
       String readerKey,
-      bool isMatch,
       List<String> editorIds,
       List<String> readerIds});
 }
@@ -95,7 +90,6 @@ class _$GameCopyWithImpl<$Res> implements $GameCopyWith<$Res> {
     Object? heldAt = freezed,
     Object? editorKey = freezed,
     Object? readerKey = freezed,
-    Object? isMatch = freezed,
     Object? editorIds = freezed,
     Object? readerIds = freezed,
   }) {
@@ -120,10 +114,6 @@ class _$GameCopyWithImpl<$Res> implements $GameCopyWith<$Res> {
           ? _value.readerKey
           : readerKey // ignore: cast_nullable_to_non_nullable
               as String,
-      isMatch: isMatch == freezed
-          ? _value.isMatch
-          : isMatch // ignore: cast_nullable_to_non_nullable
-              as bool,
       editorIds: editorIds == freezed
           ? _value.editorIds
           : editorIds // ignore: cast_nullable_to_non_nullable
@@ -147,7 +137,6 @@ abstract class _$GameCopyWith<$Res> implements $GameCopyWith<$Res> {
       DateTime? heldAt,
       String editorKey,
       String readerKey,
-      bool isMatch,
       List<String> editorIds,
       List<String> readerIds});
 }
@@ -168,7 +157,6 @@ class __$GameCopyWithImpl<$Res> extends _$GameCopyWithImpl<$Res>
     Object? heldAt = freezed,
     Object? editorKey = freezed,
     Object? readerKey = freezed,
-    Object? isMatch = freezed,
     Object? editorIds = freezed,
     Object? readerIds = freezed,
   }) {
@@ -193,10 +181,6 @@ class __$GameCopyWithImpl<$Res> extends _$GameCopyWithImpl<$Res>
           ? _value.readerKey
           : readerKey // ignore: cast_nullable_to_non_nullable
               as String,
-      isMatch: isMatch == freezed
-          ? _value.isMatch
-          : isMatch // ignore: cast_nullable_to_non_nullable
-              as bool,
       editorIds: editorIds == freezed
           ? _value.editorIds
           : editorIds // ignore: cast_nullable_to_non_nullable
@@ -218,7 +202,6 @@ class _$_Game implements _Game {
       this.heldAt,
       this.editorKey = '',
       this.readerKey = '',
-      this.isMatch = true,
       this.editorIds = const <String>[],
       this.readerIds = const <String>[]});
 
@@ -239,19 +222,18 @@ class _$_Game implements _Game {
   @JsonKey(defaultValue: '')
   @override
   final String readerKey;
-  @JsonKey(defaultValue: true)
-  @override
-  final bool isMatch;
-  @JsonKey(defaultValue: const <String>[])
+  @JsonKey(defaultValue: <String>[])
   @override
   final List<String> editorIds;
-  @JsonKey(defaultValue: const <String>[])
+  @JsonKey(defaultValue: <String>[])
   @override
   final List<String> readerIds;
 
   @override
   String toString() {
-    return 'Game(gameId: $gameId, gameTitle: $gameTitle, heldAt: $heldAt, editorKey: $editorKey, readerKey: $readerKey, isMatch: $isMatch, editorIds: $editorIds, readerIds: $readerIds)';
+    return 'Game(gameId: $gameId, gameTitle: $gameTitle, '
+        'heldAt: $heldAt, editorKey: $editorKey, readerKey: $readerKey, '
+        'editorIds: $editorIds, readerIds: $readerIds)';
   }
 
   @override
@@ -271,9 +253,6 @@ class _$_Game implements _Game {
             (identical(other.readerKey, readerKey) ||
                 const DeepCollectionEquality()
                     .equals(other.readerKey, readerKey)) &&
-            (identical(other.isMatch, isMatch) ||
-                const DeepCollectionEquality()
-                    .equals(other.isMatch, isMatch)) &&
             (identical(other.editorIds, editorIds) ||
                 const DeepCollectionEquality()
                     .equals(other.editorIds, editorIds)) &&
@@ -290,7 +269,6 @@ class _$_Game implements _Game {
       const DeepCollectionEquality().hash(heldAt) ^
       const DeepCollectionEquality().hash(editorKey) ^
       const DeepCollectionEquality().hash(readerKey) ^
-      const DeepCollectionEquality().hash(isMatch) ^
       const DeepCollectionEquality().hash(editorIds) ^
       const DeepCollectionEquality().hash(readerIds);
 
@@ -312,7 +290,6 @@ abstract class _Game implements Game {
       DateTime? heldAt,
       String editorKey,
       String readerKey,
-      bool isMatch,
       List<String> editorIds,
       List<String> readerIds}) = _$_Game;
 
@@ -328,8 +305,6 @@ abstract class _Game implements Game {
   String get editorKey => throw _privateConstructorUsedError;
   @override
   String get readerKey => throw _privateConstructorUsedError;
-  @override
-  bool get isMatch => throw _privateConstructorUsedError;
   @override
   List<String> get editorIds => throw _privateConstructorUsedError;
   @override

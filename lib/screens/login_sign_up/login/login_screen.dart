@@ -98,7 +98,7 @@ class LoginScreen extends HookWidget {
                 ],
               ),
             ),
-            _isLoading ? const LoadingScreen() : Container(),
+            _isLoading ? LoadingScreen(context) : Container(),
           ]),
         ),
       ),

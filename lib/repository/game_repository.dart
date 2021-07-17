@@ -9,30 +9,30 @@ class GameRepository {
   GameRepository._();
   static final instance = GameRepository._();
 
-  static const userKey = 'users';
-  static const matchKey = 'matches';
-  static const rehearsalKey = 'rehearsals';
-
   AuthRepository get authRepository => AuthRepository.instance;
   UserRepository get userRepository => UserRepository.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+  static const userKey = 'users';
+  static const matchKey = 'matches';
+  static const rehearsalKey = 'rehearsals';
+  static const matchIdKey = 'matchIds';
+  static const rehearsalIdKey = 'rehearsalIds';
+
   Future<List<Game>> fetchMatches(AppUser appUser) async {
     final matchList = <Game>[];
-    final matchQuery = await _db
+    final query = await _db
         .collection(userKey)
         .doc(appUser.userId)
-        .collection(matchKey)
+        .collection(matchIdKey)
         .get();
-    final matchIds = matchQuery.docs
-        .map((game) => game.data()['gameId'].toString())
-        .toList();
+    final matchIds = query.docs.map((game) => game.id).toList();
     if (matchIds.isNotEmpty) {
       for (final gameId in matchIds) {
-        final gameDoc = await _db.collection(matchKey).doc(gameId).get();
-        if (gameDoc.exists) {
-          final game = Game.fromJson(gameDoc as Map<String, dynamic>);
-          matchList.add(game);
+        final matchDoc = await _db.collection(matchKey).doc(gameId).get();
+        if (matchDoc.exists) {
+          final match = Game.fromJson(matchDoc.data()!);
+          matchList.add(match);
         }
       }
       matchList.sort((a, b) => b.heldAt!.compareTo(a.heldAt!));
@@ -40,23 +40,30 @@ class GameRepository {
     return matchList;
   }
 
-  Future<void> setMatch() async {}
+  Future<void> createNewMatch(AppUser appUser, Game match) async {
+    await _db.collection(matchKey).doc(match.gameId).set(match.toJson());
+    await _db
+        .collection(userKey)
+        .doc(appUser.userId)
+        .collection(matchIdKey)
+        .doc(match.gameId)
+        .set(<String, dynamic>{'matchId': match.gameId});
+  }
 
   Future<List<Game>> fetchRehearsals(AppUser appUser) async {
     final rehearsalList = <Game>[];
-    final rehearsalQuery = await _db
+    final query = await _db
         .collection(userKey)
         .doc(appUser.userId)
-        .collection(rehearsalKey)
+        .collection(rehearsalIdKey)
         .get();
-    final rehearsalIds = rehearsalQuery.docs
-        .map((rehearsalId) => rehearsalId.data()['gameId'].toString())
-        .toList();
+    final rehearsalIds =
+        query.docs.map((rehearsalId) => rehearsalId.id).toList();
     for (final rehearsalId in rehearsalIds) {
       final rehearsalDoc =
           await _db.collection(rehearsalKey).doc(rehearsalId).get();
       if (rehearsalDoc.exists) {
-        final rehearsal = Game.fromJson(rehearsalDoc as Map<String, dynamic>);
+        final rehearsal = Game.fromJson(rehearsalDoc.data()!);
         rehearsalList.add(rehearsal);
       }
     }
@@ -64,7 +71,16 @@ class GameRepository {
     return rehearsalList;
   }
 
-  Future<List<Game>> fetchFavoriteGames(AppUser appUser) async {
-    return [];
+  Future<void> createNewRehearsal(AppUser appUser, Game rehearsal) async {
+    await _db
+        .collection(rehearsalKey)
+        .doc(rehearsal.gameId)
+        .set(rehearsal.toJson());
+    await _db
+        .collection(userKey)
+        .doc(appUser.userId)
+        .collection(rehearsalIdKey)
+        .doc(rehearsal.gameId)
+        .set(<String, dynamic>{'rehearsalId': rehearsal.gameId});
   }
 }

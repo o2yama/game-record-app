@@ -1,17 +1,17 @@
-import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/widgets/ad_widget.dart';
+import 'package:record_game_app/common/widgets/game_document.dart';
 import 'package:record_game_app/common/widgets/loading_screen.dart';
 import 'package:record_game_app/common/widgets/search_text_field.dart';
+import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/domain/game/game.dart';
 import 'package:record_game_app/screens/create_new_rehearsal/create_new_rehearsal_screen.dart';
 import 'package:record_game_app/screens/game_detail_screen/game_detail_argument.dart';
 import 'package:record_game_app/screens/game_detail_screen/game_detail_screen.dart';
 import 'package:record_game_app/screens/home_screens/rehearsal_list_screen/rehearsal_list_state.dart';
-import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_model.dart';
 import 'package:record_game_app/common/loading_state.dart';
 
 final _rehearsalController = TextEditingController();
@@ -27,7 +27,6 @@ class RehearsalListScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _isLoading = useProvider(loadingStateProvider);
-    final _signUpModel = useProvider(signUpModelProvider);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -37,14 +36,8 @@ class RehearsalListScreen extends HookWidget {
           actions: [
             IconButton(
               onPressed: () async {
-                _signUpModel.authRepository.authUser!.email == ''
-                    ? await showOkAlertDialog(
-                        context: context,
-                        title: 'ユーザー登録をして、\n試合を記録しましょう！',
-                        message: 'アカウントページより\n新規登録、ログインできます。',
-                      )
-                    : Navigator.of(context)
-                        .push<Widget>(CreateNewRehearsalScreen.route());
+                await Navigator.of(context)
+                    .push<Widget>(CreateNewRehearsalScreen.route());
               },
               icon: const Icon(Icons.add, color: Colors.white),
             ),
@@ -52,7 +45,8 @@ class RehearsalListScreen extends HookWidget {
         ),
         body: Stack(children: [
           const RehearsalListView(),
-          _isLoading ? const LoadingScreen() : Container(),
+          const AdWidget(),
+          _isLoading ? LoadingScreen(context) : Container(),
         ]),
       ),
     );
@@ -72,56 +66,47 @@ class RehearsalListView extends HookWidget {
     );
   }
 
-  Widget _rehearsalTile(BuildContext context, Game game, bool isLast) {
-    return Column(children: [
-      ListTile(
-        onTap: () => Navigator.of(context).push<Widget>(
-          GameDetailScreen.route(
-              gameDetailArgument: GameDetailArgument(game: game)),
-        ),
-        leading: Text(
-          '${game.heldAt!.month}/${game.heldAt!.day}',
-          textAlign: TextAlign.center,
-        ),
-        title: Text(
-          game.gameTitle,
-          style: Theme.of(context).textTheme.headline6,
-        ),
+  Widget _rehearsalTile(BuildContext context, Game game) {
+    return InkWell(
+      onTap: () => Navigator.of(context).push<Widget>(
+        GameDetailScreen.route(
+            gameDetailArgument: GameDetailArgument(game: game)),
       ),
-      isLast ? const AdWidget() : Container(),
-    ]);
+      child: GameDocument(game: game),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final _loadingStateModel = useProvider(loadingStateProvider.notifier);
+    final _appUser = useProvider(appUserStateProvider);
     final _rehearsalListModel =
         useProvider(rehearsalListStateProvider.notifier);
     final _rehearsalList = useProvider(rehearsalListStateProvider);
 
+    Future(() async {
+      _loadingStateModel.startLoading();
+      if (_rehearsalList == null) {
+        await _rehearsalListModel.fetchRehearsals(_appUser);
+      }
+      _loadingStateModel.endLoading();
+    });
+
     return RefreshIndicator(
       onRefresh: () async {
         _loadingStateModel.startLoading();
-        await _rehearsalListModel.fetchRehearsals();
+        await _rehearsalListModel.fetchRehearsals(_appUser);
         _loadingStateModel.endLoading();
       },
-      child: _rehearsalList.isEmpty
-          ? Column(children: [
-              _searchField(context),
-              const Expanded(child: SizedBox()),
-              const AdWidget(),
-            ])
+      child: _rehearsalList == null
+          ? Container()
           : Column(children: [
               _searchField(context),
               Expanded(
                 child: ListView.builder(
                   itemCount: _rehearsalList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return _rehearsalTile(
-                      context,
-                      _rehearsalList[index],
-                      index == _rehearsalList.length - 1,
-                    );
+                    return _rehearsalTile(context, _rehearsalList[index]);
                   },
                 ),
               ),
