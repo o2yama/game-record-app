@@ -44,42 +44,37 @@ class MyApp extends HookWidget {
         Locale('en', 'US'),
         Locale('ja', 'JP'),
       ],
-      home: AnimatedSplashScreen(
-        splash: 'images/icon.png',
-        backgroundColor: Colors.white,
-        splashIconSize: 192,
-        splashTransition: SplashTransition.rotationTransition,
-        nextScreen: FutureBuilder(
-          future: _appUserModel.getUserData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Scaffold(body: LoadingScreen(context));
-            } else if (snapshot.data == null) {
-              return const SignUpLoginSelectScreen();
-            } else {
-              return const HomeScreen();
-            }
-          },
-        ),
+      home: FutureBuilder(
+        future: _appUserModel.getUserData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Scaffold(body: LoadingScreen(context));
+          } else if (snapshot.data == null) {
+            return const SignUpLoginSelectScreen();
+          } else {
+            return const HomeScreen();
+          }
+        },
       ),
       theme: ThemeData(
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-              primary: Colors.purpleAccent,
-              textStyle: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
-              shape: const StadiumBorder(),
-              elevation: 10),
-        ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.white,
-            textStyle: const TextStyle(color: Colors.purple),
+            primary: Colors.white,
+            textStyle: const TextStyle(
+              color: Colors.purple,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+            side: const BorderSide(color: Colors.purple, width: 2),
             shape: RoundedRectangleBorder(
-              side: BorderSide.none,
               borderRadius: BorderRadius.circular(10),
             ),
             elevation: 5,
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            shape: const RoundedRectangleBorder(side: BorderSide.none),
           ),
         ),
         primaryColor: Colors.purple,

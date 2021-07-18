@@ -12,6 +12,13 @@ class MatchListState extends StateNotifier<List<Game>?> {
   GameRepository get gameRepository => GameRepository.instance;
 
   Future<void> fetchMatches(AppUser appUser) async {
-    state = await gameRepository.fetchMatches(appUser);
+    final matches = <Game>[];
+    final allGames = await gameRepository.fetchGames(appUser);
+    for (final game in allGames) {
+      if (!game.isRehearsal) {
+        matches.add(game);
+      }
+    }
+    state = matches;
   }
 }

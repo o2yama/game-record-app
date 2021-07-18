@@ -47,7 +47,6 @@ class LoginScreen extends HookWidget {
   //ユーザー登録がまだだった場合サインアップページへ
   Widget _toSignUpScreenButton(BuildContext context) {
     return TextButton(
-      style: TextButton.styleFrom(elevation: 0, side: BorderSide.none),
       onPressed: () {
         Navigator.of(context)
             .pushAndRemoveUntil<Widget>(SignUpScreen.route(), (_) => false);
@@ -81,15 +80,11 @@ class LoginScreen extends HookWidget {
                   const SizedBox(height: 24),
                   _passwordField(context),
                   const SizedBox(height: 50),
-                  TextButton(
+                  ElevatedButton(
                     onPressed: () => _onLoginButtonPressed(context),
                     child: Text(
                       'ログイン',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Theme.of(context).primaryColor,
-                      ),
+                      style: TextStyle(color: Theme.of(context).primaryColor),
                     ),
                   ),
                   const SizedBox(height: 30),

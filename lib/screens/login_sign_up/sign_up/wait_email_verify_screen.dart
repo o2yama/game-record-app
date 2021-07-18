@@ -63,19 +63,17 @@ class WaitEmailVerifyScreen extends HookWidget {
                       (route) => false,
                     );
                   } else {
-                    Validator()
-                        .showValidMessage('リンクをタップしてから、認証まで数秒かかることがあります。');
+                    Validator().showValidMessage('リンクをタップして、認証を完了してください。');
                   }
                 },
-                child: const Text('メール認証完了'),
+                child: Text(
+                  'メール認証完了',
+                  style: TextStyle(color: Theme.of(context).primaryColor),
+                ),
               ),
               const SizedBox(height: 64),
               const Text('メールが届かない場合は'),
               TextButton(
-                style: TextButton.styleFrom(
-                  side: BorderSide.none,
-                  elevation: 0,
-                ),
                 onPressed: _signUpModel.sendEmailVerification,
                 child: const Text('認証メール再送信'),
               ),

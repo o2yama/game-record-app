@@ -1,7 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final loadingStateProvider =
-    StateNotifierProvider.autoDispose<LoadingStateModel, bool>(
+final loadingStateProvider = StateNotifierProvider<LoadingStateModel, bool>(
   (ref) => LoadingStateModel(),
 );
 

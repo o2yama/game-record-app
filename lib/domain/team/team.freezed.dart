@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'team.dart';
 
@@ -23,7 +24,7 @@ class _$TeamTearOff {
       {String teamId = '',
       String teamName = '',
       bool isTeam = false,
-      num? teamTotal}) {
+      num teamTotal = 0}) {
     return _Team(
       teamId: teamId,
       teamName: teamName,
@@ -45,7 +46,7 @@ mixin _$Team {
   String get teamId => throw _privateConstructorUsedError;
   String get teamName => throw _privateConstructorUsedError;
   bool get isTeam => throw _privateConstructorUsedError;
-  num? get teamTotal => throw _privateConstructorUsedError;
+  num get teamTotal => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -56,7 +57,7 @@ mixin _$Team {
 abstract class $TeamCopyWith<$Res> {
   factory $TeamCopyWith(Team value, $Res Function(Team) then) =
       _$TeamCopyWithImpl<$Res>;
-  $Res call({String teamId, String teamName, bool isTeam, num? teamTotal});
+  $Res call({String teamId, String teamName, bool isTeam, num teamTotal});
 }
 
 /// @nodoc
@@ -90,7 +91,7 @@ class _$TeamCopyWithImpl<$Res> implements $TeamCopyWith<$Res> {
       teamTotal: teamTotal == freezed
           ? _value.teamTotal
           : teamTotal // ignore: cast_nullable_to_non_nullable
-              as num?,
+              as num,
     ));
   }
 }
@@ -100,7 +101,7 @@ abstract class _$TeamCopyWith<$Res> implements $TeamCopyWith<$Res> {
   factory _$TeamCopyWith(_Team value, $Res Function(_Team) then) =
       __$TeamCopyWithImpl<$Res>;
   @override
-  $Res call({String teamId, String teamName, bool isTeam, num? teamTotal});
+  $Res call({String teamId, String teamName, bool isTeam, num teamTotal});
 }
 
 /// @nodoc
@@ -135,7 +136,7 @@ class __$TeamCopyWithImpl<$Res> extends _$TeamCopyWithImpl<$Res>
       teamTotal: teamTotal == freezed
           ? _value.teamTotal
           : teamTotal // ignore: cast_nullable_to_non_nullable
-              as num?,
+              as num,
     ));
   }
 }
@@ -147,7 +148,7 @@ class _$_Team implements _Team {
       {this.teamId = '',
       this.teamName = '',
       this.isTeam = false,
-      this.teamTotal});
+      this.teamTotal = 0});
 
   factory _$_Team.fromJson(Map<String, dynamic> json) =>
       _$_$_TeamFromJson(json);
@@ -161,13 +162,13 @@ class _$_Team implements _Team {
   @JsonKey(defaultValue: false)
   @override
   final bool isTeam;
+  @JsonKey(defaultValue: 0)
   @override
-  final num? teamTotal;
+  final num teamTotal;
 
   @override
   String toString() {
-    return 'Team(teamId: $teamId, teamName: $teamName, '
-        'isTeam: $isTeam, teamTotal: $teamTotal)';
+    return 'Team(teamId: $teamId, teamName: $teamName, isTeam: $isTeam, teamTotal: $teamTotal)';
   }
 
   @override
@@ -207,7 +208,7 @@ class _$_Team implements _Team {
 
 abstract class _Team implements Team {
   const factory _Team(
-      {String teamId, String teamName, bool isTeam, num? teamTotal}) = _$_Team;
+      {String teamId, String teamName, bool isTeam, num teamTotal}) = _$_Team;
 
   factory _Team.fromJson(Map<String, dynamic> json) = _$_Team.fromJson;
 
@@ -218,7 +219,7 @@ abstract class _Team implements Team {
   @override
   bool get isTeam => throw _privateConstructorUsedError;
   @override
-  num? get teamTotal => throw _privateConstructorUsedError;
+  num get teamTotal => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$TeamCopyWith<_Team> get copyWith => throw _privateConstructorUsedError;

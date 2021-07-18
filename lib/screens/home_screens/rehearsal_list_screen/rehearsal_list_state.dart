@@ -13,6 +13,13 @@ class RehearsalListState extends StateNotifier<List<Game>?> {
   GameRepository get gameRepository => GameRepository.instance;
 
   Future<void> fetchRehearsals(AppUser appUser) async {
-    state = await gameRepository.fetchRehearsals(appUser);
+    final rehearsals = <Game>[];
+    final allGames = await gameRepository.fetchGames(appUser);
+    for (final game in allGames) {
+      if (game.isRehearsal) {
+        rehearsals.add(game);
+      }
+    }
+    state = rehearsals;
   }
 }

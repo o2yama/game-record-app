@@ -1,33 +1,32 @@
 users:
-  userId: String #uid
-  email: String
   name: String #Default = unknown
   imageUrl: String?
+
+  invisibleUserFields:
+    email: String
+    userId: String
 
   tokens: #documentのIDとToken統一
     token: String
 
-  matchIds: #docmentIdとmatchId統一
-    matchId: String
+  gameIds: #docmentIdとmatchId統一
+    gameId: String
 
-  rehearsalIds:
-    rehearsalId: String
-
-matches:
-rehearsals:
+games:
   gameId: String
   gameTitle: String
   heldAt: Timestamp
+  isRehearsal: bool
   editorKey: String #6文字以上
   readerKey: String #6文字以上
-  editorIds: [String]  #editorのuserIdリスト
-  readerIds: [String] #readerのuserIdリスト
+  editors: [String]  #editorのuserIdリスト
+  readers: [String] #readerのuserIdリスト
 
   teams:
     teamId: String
     teamName: String
     isTeam: bool
-    teamTotal: num? #チームだったら
+    teamTotal: num #チームだったら
 
     players:
       playerId: String

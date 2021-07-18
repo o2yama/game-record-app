@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_screen.dart';
-
 import 'login/login_screen.dart';
 
 class SignUpLoginSelectScreen extends StatelessWidget {
@@ -24,7 +23,10 @@ class SignUpLoginSelectScreen extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () => Navigator.of(context)
                       .pushAndRemoveUntil(SignUpScreen.route(), (_) => false),
-                  child: const Text('新規登録'),
+                  child: Text(
+                    '新規登録',
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  ),
                 ),
                 const SizedBox(width: 8),
                 ElevatedButton(
@@ -32,7 +34,10 @@ class SignUpLoginSelectScreen extends StatelessWidget {
                     Navigator.of(context).pushAndRemoveUntil(
                         LoginScreen.route(), (route) => false);
                   },
-                  child: const Text('ログイン'),
+                  child: Text(
+                    'ログイン',
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  ),
                 ),
               ],
             ),

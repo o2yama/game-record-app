@@ -1,8 +1,11 @@
+import 'dart:io';
+
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/widgets/ad_widget.dart';
-import 'package:record_game_app/common/widgets/large_image/large_image_screen.dart';
 import 'package:record_game_app/common/widgets/large_image/large_image_state.dart';
 import 'package:record_game_app/common/widgets/restart_widget.dart';
 import 'package:record_game_app/common/widgets/loading_screen.dart';
@@ -16,8 +19,7 @@ class AccountScreen extends HookWidget {
     return MaterialPageRoute<Widget>(builder: (_) => const AccountScreen());
   }
 
-  Widget accountTile(
-      BuildContext context, String name, String email, String? imageUrl) {
+  Widget accountTile(BuildContext context, String name, String? imageUrl) {
     return SizedBox(
       height: 80,
       child: ListTile(
@@ -44,11 +46,71 @@ class AccountScreen extends HookWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(name, style: Theme.of(context).textTheme.headline5),
-            Text(email != '' ? email : 'ログインしてください',
-                style: const TextStyle(color: Colors.grey, fontSize: 16)),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _signOutButton(BuildContext context) {
+    return TextButton(
+      onPressed: () async {
+        await showDialog<Widget>(
+          context: context,
+          builder: (context) => Platform.isIOS
+              ? CupertinoAlertDialog(
+                  title: const Text('このアカウントで再度サインインするには、'
+                      'ご登録のメールアドレスと、パスワードが必要です。'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('キャンセル'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        context
+                            .read(loadingStateProvider.notifier)
+                            .startLoading();
+                        await context
+                            .read(appUserStateProvider.notifier)
+                            .signOut();
+                        context
+                            .read(loadingStateProvider.notifier)
+                            .endLoading();
+                        RestartWidget.restartApp(context);
+                      },
+                      child: const Text('OK'),
+                    )
+                  ],
+                )
+              : AlertDialog(
+                  title: const Text('このアカウントで再度サインインするには、'
+                      'ご登録のメールアドレスと、パスワードが必要です。'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('キャンセル'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        context
+                            .read(loadingStateProvider.notifier)
+                            .startLoading();
+                        await context
+                            .read(appUserStateProvider.notifier)
+                            .signOut();
+                        context
+                            .read(loadingStateProvider.notifier)
+                            .endLoading();
+                        RestartWidget.restartApp(context);
+                      },
+                      child: const Text('OK'),
+                    )
+                  ],
+                ),
+        );
+      },
+      child: const Text('サインアウト'),
     );
   }
 
@@ -56,7 +118,6 @@ class AccountScreen extends HookWidget {
   Widget build(BuildContext context) {
     final _isLoading = useProvider<bool>(loadingStateProvider);
     final _appUser = useProvider(appUserStateProvider);
-    final _appUserModel = useProvider(appUserStateProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(title: const Text('アカウント')),
@@ -65,25 +126,14 @@ class AccountScreen extends HookWidget {
           SingleChildScrollView(
             child: Column(children: [
               const SizedBox(height: 8),
-              accountTile(
-                  context, _appUser.name, _appUser.email, _appUser.imageUrl),
+              accountTile(context, _appUser.name, _appUser.imageUrl),
               const Divider(color: Colors.black54),
               const SizedBox(height: 40),
-              TextButton(
-                onPressed: () async {
-                  context.read(loadingStateProvider.notifier).startLoading();
-                  await _appUserModel.signOut();
-                  context.read(loadingStateProvider.notifier).endLoading();
-                  RestartWidget.restartApp(context);
-                },
-                style:
-                    TextButton.styleFrom(side: BorderSide.none, elevation: 0),
-                child: const Text('サインアウト'),
-              ),
+              _signOutButton(context),
             ]),
           ),
           const AdWidget(),
-          LargeImageScreen(imageUrl: _appUser.imageUrl!),
+          // LargeImageScreen(imageUrl: _appUser.imageUrl!),
           _isLoading ? LoadingScreen(context) : Container(),
         ],
       ),

@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'app_user.dart';
 
@@ -19,14 +20,9 @@ AppUser _$AppUserFromJson(Map<String, dynamic> json) {
 class _$AppUserTearOff {
   const _$AppUserTearOff();
 
-  _AppUser call(
-      {String userId = '',
-      String email = '',
-      String name = '',
-      String? imageUrl}) {
+  _AppUser call({String userId = '', String name = '', String? imageUrl}) {
     return _AppUser(
       userId: userId,
-      email: email,
       name: name,
       imageUrl: imageUrl,
     );
@@ -43,7 +39,6 @@ const $AppUser = _$AppUserTearOff();
 /// @nodoc
 mixin _$AppUser {
   String get userId => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
 
@@ -56,7 +51,7 @@ mixin _$AppUser {
 abstract class $AppUserCopyWith<$Res> {
   factory $AppUserCopyWith(AppUser value, $Res Function(AppUser) then) =
       _$AppUserCopyWithImpl<$Res>;
-  $Res call({String userId, String email, String name, String? imageUrl});
+  $Res call({String userId, String name, String? imageUrl});
 }
 
 /// @nodoc
@@ -70,7 +65,6 @@ class _$AppUserCopyWithImpl<$Res> implements $AppUserCopyWith<$Res> {
   @override
   $Res call({
     Object? userId = freezed,
-    Object? email = freezed,
     Object? name = freezed,
     Object? imageUrl = freezed,
   }) {
@@ -78,10 +72,6 @@ class _$AppUserCopyWithImpl<$Res> implements $AppUserCopyWith<$Res> {
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: email == freezed
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
               as String,
       name: name == freezed
           ? _value.name
@@ -100,7 +90,7 @@ abstract class _$AppUserCopyWith<$Res> implements $AppUserCopyWith<$Res> {
   factory _$AppUserCopyWith(_AppUser value, $Res Function(_AppUser) then) =
       __$AppUserCopyWithImpl<$Res>;
   @override
-  $Res call({String userId, String email, String name, String? imageUrl});
+  $Res call({String userId, String name, String? imageUrl});
 }
 
 /// @nodoc
@@ -115,7 +105,6 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
   @override
   $Res call({
     Object? userId = freezed,
-    Object? email = freezed,
     Object? name = freezed,
     Object? imageUrl = freezed,
   }) {
@@ -123,10 +112,6 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: email == freezed
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
               as String,
       name: name == freezed
           ? _value.name
@@ -143,8 +128,7 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_AppUser implements _AppUser {
-  const _$_AppUser(
-      {this.userId = '', this.email = '', this.name = '', this.imageUrl});
+  const _$_AppUser({this.userId = '', this.name = '', this.imageUrl});
 
   factory _$_AppUser.fromJson(Map<String, dynamic> json) =>
       _$_$_AppUserFromJson(json);
@@ -154,20 +138,13 @@ class _$_AppUser implements _AppUser {
   final String userId;
   @JsonKey(defaultValue: '')
   @override
-  final String email;
-  @JsonKey(defaultValue: '')
-  @override
   final String name;
   @override
   final String? imageUrl;
 
   @override
   String toString() {
-    return 'AppUser('
-        'userId: $userId, '
-        'email: $email, '
-        'name: $name, '
-        'imageUrl: $imageUrl)';
+    return 'AppUser(userId: $userId, name: $name, imageUrl: $imageUrl)';
   }
 
   @override
@@ -176,8 +153,6 @@ class _$_AppUser implements _AppUser {
         (other is _AppUser &&
             (identical(other.userId, userId) ||
                 const DeepCollectionEquality().equals(other.userId, userId)) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
             (identical(other.imageUrl, imageUrl) ||
@@ -189,7 +164,6 @@ class _$_AppUser implements _AppUser {
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(userId) ^
-      const DeepCollectionEquality().hash(email) ^
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(imageUrl);
 
@@ -205,18 +179,13 @@ class _$_AppUser implements _AppUser {
 }
 
 abstract class _AppUser implements AppUser {
-  const factory _AppUser(
-      {String userId,
-      String email,
-      String name,
-      String? imageUrl}) = _$_AppUser;
+  const factory _AppUser({String userId, String name, String? imageUrl}) =
+      _$_AppUser;
 
   factory _AppUser.fromJson(Map<String, dynamic> json) = _$_AppUser.fromJson;
 
   @override
   String get userId => throw _privateConstructorUsedError;
-  @override
-  String get email => throw _privateConstructorUsedError;
   @override
   String get name => throw _privateConstructorUsedError;
   @override

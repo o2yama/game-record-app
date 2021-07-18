@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/widgets/ad_widget.dart';
-import 'package:record_game_app/common/widgets/game_document.dart';
+import 'package:record_game_app/common/widgets/simple_text_field.dart';
+import 'package:record_game_app/screens/home_screens/match_list_screen/game_document.dart';
 import 'package:record_game_app/common/widgets/loading_screen.dart';
-import 'package:record_game_app/common/widgets/search_text_field.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/domain/game/game.dart';
-import 'package:record_game_app/screens/create_new_rehearsal/create_new_rehearsal_screen.dart';
+import 'package:record_game_app/screens/create_new_rehearsal/create_new_game_screen.dart';
 import 'package:record_game_app/screens/game_detail_screen/game_detail_argument.dart';
 import 'package:record_game_app/screens/game_detail_screen/game_detail_screen.dart';
 import 'package:record_game_app/screens/home_screens/rehearsal_list_screen/rehearsal_list_state.dart';
@@ -37,7 +37,7 @@ class RehearsalListScreen extends HookWidget {
             IconButton(
               onPressed: () async {
                 await Navigator.of(context)
-                    .push<Widget>(CreateNewRehearsalScreen.route());
+                    .push<Widget>(CreateNewGameScreen.route());
               },
               icon: const Icon(Icons.add, color: Colors.white),
             ),
@@ -59,9 +59,10 @@ class RehearsalListView extends HookWidget {
   Widget _searchField(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
-      child: SearchTextField(
+      child: SimpleTextField(
         controller: _rehearsalController,
         hintText: 'チェック名で検索',
+        keyboardType: TextInputType.text,
       ),
     );
   }
@@ -70,7 +71,7 @@ class RehearsalListView extends HookWidget {
     return InkWell(
       onTap: () => Navigator.of(context).push<Widget>(
         GameDetailScreen.route(
-            gameDetailArgument: GameDetailArgument(game: game)),
+            gameDetailArgument: GameDetailArgument(game: game, isMatch: false)),
       ),
       child: GameDocument(game: game),
     );

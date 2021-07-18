@@ -10,7 +10,6 @@ part 'app_user.g.dart';
 abstract class AppUser with _$AppUser {
   const factory AppUser({
     @Default('') String userId,
-    @Default('') String email,
     @Default('') String name,
     String? imageUrl,
   }) = _AppUser;
@@ -44,8 +43,7 @@ class AppUserState extends StateNotifier<AppUser> {
     await authRepository.signOut();
     state = const AppUser(
       userId: '',
-      email: '',
-      name: 'unknown',
+      name: '',
       imageUrl: null,
     );
   }

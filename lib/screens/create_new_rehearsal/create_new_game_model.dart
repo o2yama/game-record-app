@@ -5,21 +5,22 @@ import 'package:record_game_app/domain/game/game.dart';
 import 'package:record_game_app/repository/game_repository.dart';
 import 'package:uuid/uuid.dart';
 
-final createNewRehearsalModelProvider = ChangeNotifierProvider.family(
-    (ref, AppUser appUser) => CreateNewRehearsalModel(appUser: appUser));
+final createNewGameModelProvider = ChangeNotifierProvider.family(
+    (ref, AppUser appUser) => CreateNewGameModel(appUser: appUser));
 
-class CreateNewRehearsalModel extends ChangeNotifier {
-  CreateNewRehearsalModel({required this.appUser});
+class CreateNewGameModel extends ChangeNotifier {
+  CreateNewGameModel({required this.appUser});
   final AppUser appUser;
   GameRepository get gameRepository => GameRepository.instance;
 
   String get getUuid => const Uuid().v4();
 
-  Future<void> createNewRehearsal(
-      {required String gameTitle,
-      required String editorKey,
-      required String readerKey,
-      required DateTime heldAt}) async {
+  Future<void> createNewGame({
+    required String gameTitle,
+    required String editorKey,
+    required String readerKey,
+    required DateTime heldAt,
+  }) async {
     final newId = getUuid;
     final newGame = const Game().copyWith(
       gameId: newId,
@@ -30,6 +31,6 @@ class CreateNewRehearsalModel extends ChangeNotifier {
       editorIds: [appUser.userId],
       readerIds: [],
     );
-    await gameRepository.createNewRehearsal(appUser, newGame);
+    await gameRepository.createNewGame(appUser, newGame);
   }
 }

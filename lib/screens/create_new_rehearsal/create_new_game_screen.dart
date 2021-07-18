@@ -11,30 +11,32 @@ import 'package:record_game_app/common/widgets/loading_screen.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/common/loading_state.dart';
 import 'package:record_game_app/screens/home_screens/rehearsal_list_screen/rehearsal_list_state.dart';
-import 'create_new_rehearsal_model.dart';
+import 'create_new_game_model.dart';
 
-final rehearsalTitleController = TextEditingController();
+final gameTitleController = TextEditingController();
 final editorKeyController = TextEditingController();
 final readerKeyController = TextEditingController();
 
-class CreateNewRehearsalScreen extends HookWidget {
-  const CreateNewRehearsalScreen({Key? key}) : super(key: key);
+class CreateNewGameScreen extends HookWidget {
+  const CreateNewGameScreen({Key? key}) : super(key: key);
 
   static Route<Widget> route() {
     return MaterialPageRoute<Widget>(
-        builder: (_) => const CreateNewRehearsalScreen());
+      builder: (_) => const CreateNewGameScreen(),
+      fullscreenDialog: true,
+    );
   }
 
-  Widget _searchRehearsalField(BuildContext context) {
+  Widget _searchGameField(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('試技会タイトル', style: Theme.of(context).textTheme.headline6),
+          Text('試合or試技会タイトル', style: Theme.of(context).textTheme.headline6),
           const SizedBox(height: 8),
           SimpleTextField(
-            controller: rehearsalTitleController,
+            controller: gameTitleController,
             hintText: '例) 新人戦チェック',
             keyboardType: TextInputType.text,
           )
@@ -52,7 +54,7 @@ class CreateNewRehearsalScreen extends HookWidget {
           Text('編集者パスワード', style: Theme.of(context).textTheme.headline6),
           const SizedBox(height: 8),
           const Text(
-            '記録係用のパスワードです。',
+            '記録係用のパスワードです。こちらのパスワードで登録すると、記録の編集ができます。',
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 8),
@@ -75,7 +77,7 @@ class CreateNewRehearsalScreen extends HookWidget {
           Text('閲覧者パスワード', style: Theme.of(context).textTheme.headline6),
           const SizedBox(height: 8),
           const Text(
-            '記録をしない人用のパスワードです。',
+            '公開用のパスワードです。こちらのパスワードで閲覧者登録すると、記録の編集はできません。',
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 8),
@@ -162,7 +164,7 @@ class CreateNewRehearsalScreen extends HookWidget {
   }
 
   Widget _createButton(BuildContext context, AppUser appUser, DateTime heldAt) {
-    final model = context.read(createNewRehearsalModelProvider(appUser));
+    final model = context.read(createNewGameModelProvider(appUser));
     return Container(
       height: 50,
       decoration: BoxDecoration(
@@ -171,8 +173,8 @@ class CreateNewRehearsalScreen extends HookWidget {
       ),
       child: TextButton(
         onPressed: () async {
-          if (rehearsalTitleController.text.isEmpty) {
-            Validator().showValidMessage('試技会のタイトルを入力してください');
+          if (gameTitleController.text.isEmpty) {
+            Validator().showValidMessage('試合、または試技会のタイトルを入力してください');
           } else if (!Validator().validKeys(editorKeyController.text)) {
             Validator().showValidMessage('編集者用パスワードは6文字以上です。');
           } else if (!Validator().validKeys(readerKeyController.text)) {
@@ -181,8 +183,8 @@ class CreateNewRehearsalScreen extends HookWidget {
             context.read(loadingStateProvider.notifier).startLoading();
             try {
               //新しい試技会の作成
-              await model.createNewRehearsal(
-                  gameTitle: rehearsalTitleController.text,
+              await model.createNewGame(
+                  gameTitle: gameTitleController.text,
                   editorKey: editorKeyController.text,
                   readerKey: readerKeyController.text,
                   heldAt: heldAt);
@@ -220,7 +222,7 @@ class CreateNewRehearsalScreen extends HookWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
-        appBar: AppBar(title: const Text('試技会記録の新規作成')),
+        appBar: AppBar(title: const Text('記録の新規作成')),
         body: Stack(children: [
           SingleChildScrollView(
             child: Padding(
@@ -228,7 +230,7 @@ class CreateNewRehearsalScreen extends HookWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 24),
-                  _searchRehearsalField(context),
+                  _searchGameField(context),
                   const SizedBox(height: 16),
                   _editorKeyField(context),
                   const SizedBox(height: 16),

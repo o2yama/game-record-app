@@ -11,7 +11,7 @@ _$_Team _$_$_TeamFromJson(Map<String, dynamic> json) {
     teamId: json['teamId'] as String? ?? '',
     teamName: json['teamName'] as String? ?? '',
     isTeam: json['isTeam'] as bool? ?? false,
-    teamTotal: json['teamTotal'] as num?,
+    teamTotal: json['teamTotal'] as num? ?? 0,
   );
 }
 

@@ -87,10 +87,6 @@ class SignUpScreen extends HookWidget {
                 ? Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: TextButton(
-                      style: TextButton.styleFrom(
-                        side: BorderSide.none,
-                        elevation: 0,
-                      ),
                       onPressed: model.deleteImage,
                       child: const Text('現在の写真の削除'),
                     ),
@@ -122,22 +118,17 @@ class SignUpScreen extends HookWidget {
   }
 
   Widget _resisterButton(BuildContext context) {
-    return TextButton(
+    return ElevatedButton(
       onPressed: () => _onResisterButtonPressed(context),
       child: Text(
         '登録',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-          color: Theme.of(context).primaryColor,
-        ),
+        style: TextStyle(color: Theme.of(context).primaryColor),
       ),
     );
   }
 
   Widget _toLoginScreenButton(BuildContext context) {
     return TextButton(
-      style: TextButton.styleFrom(elevation: 0, side: BorderSide.none),
       onPressed: () {
         Navigator.of(context)
             .pushAndRemoveUntil<Object>(LoginScreen.route(), (_) => false);

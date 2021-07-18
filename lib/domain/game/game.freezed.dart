@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'game.dart';
 
@@ -23,6 +24,7 @@ class _$GameTearOff {
       {String gameId = '',
       String gameTitle = '',
       DateTime? heldAt,
+      bool isRehearsal = true,
       String editorKey = '',
       String readerKey = '',
       List<String> editorIds = const <String>[],
@@ -31,6 +33,7 @@ class _$GameTearOff {
       gameId: gameId,
       gameTitle: gameTitle,
       heldAt: heldAt,
+      isRehearsal: isRehearsal,
       editorKey: editorKey,
       readerKey: readerKey,
       editorIds: editorIds,
@@ -51,6 +54,7 @@ mixin _$Game {
   String get gameId => throw _privateConstructorUsedError;
   String get gameTitle => throw _privateConstructorUsedError;
   DateTime? get heldAt => throw _privateConstructorUsedError;
+  bool get isRehearsal => throw _privateConstructorUsedError;
   String get editorKey => throw _privateConstructorUsedError;
   String get readerKey => throw _privateConstructorUsedError;
   List<String> get editorIds => throw _privateConstructorUsedError;
@@ -69,6 +73,7 @@ abstract class $GameCopyWith<$Res> {
       {String gameId,
       String gameTitle,
       DateTime? heldAt,
+      bool isRehearsal,
       String editorKey,
       String readerKey,
       List<String> editorIds,
@@ -88,6 +93,7 @@ class _$GameCopyWithImpl<$Res> implements $GameCopyWith<$Res> {
     Object? gameId = freezed,
     Object? gameTitle = freezed,
     Object? heldAt = freezed,
+    Object? isRehearsal = freezed,
     Object? editorKey = freezed,
     Object? readerKey = freezed,
     Object? editorIds = freezed,
@@ -106,6 +112,10 @@ class _$GameCopyWithImpl<$Res> implements $GameCopyWith<$Res> {
           ? _value.heldAt
           : heldAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      isRehearsal: isRehearsal == freezed
+          ? _value.isRehearsal
+          : isRehearsal // ignore: cast_nullable_to_non_nullable
+              as bool,
       editorKey: editorKey == freezed
           ? _value.editorKey
           : editorKey // ignore: cast_nullable_to_non_nullable
@@ -135,6 +145,7 @@ abstract class _$GameCopyWith<$Res> implements $GameCopyWith<$Res> {
       {String gameId,
       String gameTitle,
       DateTime? heldAt,
+      bool isRehearsal,
       String editorKey,
       String readerKey,
       List<String> editorIds,
@@ -155,6 +166,7 @@ class __$GameCopyWithImpl<$Res> extends _$GameCopyWithImpl<$Res>
     Object? gameId = freezed,
     Object? gameTitle = freezed,
     Object? heldAt = freezed,
+    Object? isRehearsal = freezed,
     Object? editorKey = freezed,
     Object? readerKey = freezed,
     Object? editorIds = freezed,
@@ -173,6 +185,10 @@ class __$GameCopyWithImpl<$Res> extends _$GameCopyWithImpl<$Res>
           ? _value.heldAt
           : heldAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      isRehearsal: isRehearsal == freezed
+          ? _value.isRehearsal
+          : isRehearsal // ignore: cast_nullable_to_non_nullable
+              as bool,
       editorKey: editorKey == freezed
           ? _value.editorKey
           : editorKey // ignore: cast_nullable_to_non_nullable
@@ -200,6 +216,7 @@ class _$_Game implements _Game {
       {this.gameId = '',
       this.gameTitle = '',
       this.heldAt,
+      this.isRehearsal = true,
       this.editorKey = '',
       this.readerKey = '',
       this.editorIds = const <String>[],
@@ -216,24 +233,25 @@ class _$_Game implements _Game {
   final String gameTitle;
   @override
   final DateTime? heldAt;
+  @JsonKey(defaultValue: true)
+  @override
+  final bool isRehearsal;
   @JsonKey(defaultValue: '')
   @override
   final String editorKey;
   @JsonKey(defaultValue: '')
   @override
   final String readerKey;
-  @JsonKey(defaultValue: <String>[])
+  @JsonKey(defaultValue: const <String>[])
   @override
   final List<String> editorIds;
-  @JsonKey(defaultValue: <String>[])
+  @JsonKey(defaultValue: const <String>[])
   @override
   final List<String> readerIds;
 
   @override
   String toString() {
-    return 'Game(gameId: $gameId, gameTitle: $gameTitle, '
-        'heldAt: $heldAt, editorKey: $editorKey, readerKey: $readerKey, '
-        'editorIds: $editorIds, readerIds: $readerIds)';
+    return 'Game(gameId: $gameId, gameTitle: $gameTitle, heldAt: $heldAt, isRehearsal: $isRehearsal, editorKey: $editorKey, readerKey: $readerKey, editorIds: $editorIds, readerIds: $readerIds)';
   }
 
   @override
@@ -247,6 +265,9 @@ class _$_Game implements _Game {
                     .equals(other.gameTitle, gameTitle)) &&
             (identical(other.heldAt, heldAt) ||
                 const DeepCollectionEquality().equals(other.heldAt, heldAt)) &&
+            (identical(other.isRehearsal, isRehearsal) ||
+                const DeepCollectionEquality()
+                    .equals(other.isRehearsal, isRehearsal)) &&
             (identical(other.editorKey, editorKey) ||
                 const DeepCollectionEquality()
                     .equals(other.editorKey, editorKey)) &&
@@ -267,6 +288,7 @@ class _$_Game implements _Game {
       const DeepCollectionEquality().hash(gameId) ^
       const DeepCollectionEquality().hash(gameTitle) ^
       const DeepCollectionEquality().hash(heldAt) ^
+      const DeepCollectionEquality().hash(isRehearsal) ^
       const DeepCollectionEquality().hash(editorKey) ^
       const DeepCollectionEquality().hash(readerKey) ^
       const DeepCollectionEquality().hash(editorIds) ^
@@ -288,6 +310,7 @@ abstract class _Game implements Game {
       {String gameId,
       String gameTitle,
       DateTime? heldAt,
+      bool isRehearsal,
       String editorKey,
       String readerKey,
       List<String> editorIds,
@@ -301,6 +324,8 @@ abstract class _Game implements Game {
   String get gameTitle => throw _privateConstructorUsedError;
   @override
   DateTime? get heldAt => throw _privateConstructorUsedError;
+  @override
+  bool get isRehearsal => throw _privateConstructorUsedError;
   @override
   String get editorKey => throw _privateConstructorUsedError;
   @override

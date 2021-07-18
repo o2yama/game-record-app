@@ -13,6 +13,7 @@ _$_Game _$_$_GameFromJson(Map<String, dynamic> json) {
     heldAt: json['heldAt'] == null
         ? null
         : DateTime.parse(json['heldAt'] as String),
+    isRehearsal: json['isRehearsal'] as bool? ?? true,
     editorKey: json['editorKey'] as String? ?? '',
     readerKey: json['readerKey'] as String? ?? '',
     editorIds: (json['editorIds'] as List<dynamic>?)
@@ -30,6 +31,7 @@ Map<String, dynamic> _$_$_GameToJson(_$_Game instance) => <String, dynamic>{
       'gameId': instance.gameId,
       'gameTitle': instance.gameTitle,
       'heldAt': instance.heldAt?.toIso8601String(),
+      'isRehearsal': instance.isRehearsal,
       'editorKey': instance.editorKey,
       'readerKey': instance.readerKey,
       'editorIds': instance.editorIds,
