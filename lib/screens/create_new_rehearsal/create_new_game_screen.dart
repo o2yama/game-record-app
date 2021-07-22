@@ -7,37 +7,46 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/date.dart';
 import 'package:record_game_app/common/validator.dart';
 import 'package:record_game_app/common/widgets/simple_text_field.dart';
-import 'package:record_game_app/common/widgets/loading_screen.dart';
+import 'package:record_game_app/common/widgets/loading_screen/loading_screen.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
-import 'package:record_game_app/common/loading_state.dart';
+import 'package:record_game_app/common/widgets/loading_screen/loading_state.dart';
 import 'package:record_game_app/screens/home_screens/rehearsal_list_screen/rehearsal_list_state.dart';
 import 'create_new_game_model.dart';
+
+enum GameType { match, rehearsal }
 
 final gameTitleController = TextEditingController();
 final editorKeyController = TextEditingController();
 final readerKeyController = TextEditingController();
 
 class CreateNewGameScreen extends HookWidget {
-  const CreateNewGameScreen({Key? key}) : super(key: key);
+  const CreateNewGameScreen({Key? key, required this.gameType})
+      : super(key: key);
+  final GameType gameType;
 
-  static Route<Widget> route() {
+  static Route<Widget> route(GameType gameType) {
+    gameTitleController.clear();
+    editorKeyController.clear();
+    readerKeyController.clear();
     return MaterialPageRoute<Widget>(
-      builder: (_) => const CreateNewGameScreen(),
+      builder: (_) => CreateNewGameScreen(gameType: gameType),
       fullscreenDialog: true,
     );
   }
 
-  Widget _searchGameField(BuildContext context) {
+  Widget _gameTitleField(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('試合or試技会タイトル', style: Theme.of(context).textTheme.headline6),
+          gameType == GameType.match
+              ? Text('試合タイトル', style: Theme.of(context).textTheme.headline5)
+              : Text('試技会タイトル', style: Theme.of(context).textTheme.headline5),
           const SizedBox(height: 8),
           SimpleTextField(
             controller: gameTitleController,
-            hintText: '例) 新人戦チェック',
+            hintText: gameType == GameType.match ? '例) 新人戦' : '例) 新人戦チェック',
             keyboardType: TextInputType.text,
           )
         ],
@@ -51,17 +60,17 @@ class CreateNewGameScreen extends HookWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('編集者パスワード', style: Theme.of(context).textTheme.headline6),
-          const SizedBox(height: 8),
-          const Text(
-            '記録係用のパスワードです。こちらのパスワードで登録すると、記録の編集ができます。',
-            style: TextStyle(color: Colors.grey),
-          ),
+          Text('編集者パスワード', style: Theme.of(context).textTheme.headline5),
           const SizedBox(height: 8),
           SimpleTextField(
             controller: editorKeyController,
             hintText: '6文字以上',
             keyboardType: TextInputType.visiblePassword,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '記録係用のパスワードです。こちらのパスワードで登録すると、記録の編集ができます。',
+            style: Theme.of(context).textTheme.headline6,
           ),
         ],
       ),
@@ -74,17 +83,17 @@ class CreateNewGameScreen extends HookWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('閲覧者パスワード', style: Theme.of(context).textTheme.headline6),
-          const SizedBox(height: 8),
-          const Text(
-            '公開用のパスワードです。こちらのパスワードで閲覧者登録すると、記録の編集はできません。',
-            style: TextStyle(color: Colors.grey),
-          ),
+          Text('閲覧者パスワード', style: Theme.of(context).textTheme.headline5),
           const SizedBox(height: 8),
           SimpleTextField(
             controller: readerKeyController,
             hintText: '6文字以上',
             keyboardType: TextInputType.visiblePassword,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '公開用のパスワードです。こちらのパスワードで登録しても、記録の編集はできません。',
+            style: Theme.of(context).textTheme.headline6,
           ),
         ],
       ),
@@ -98,14 +107,14 @@ class CreateNewGameScreen extends HookWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('開催日', style: Theme.of(context).textTheme.headline6),
+          Text('開催日', style: Theme.of(context).textTheme.headline5),
           Row(children: [
             Text(
               '${heldAt.value.year}/ '
               '${heldAt.value.month}/ '
               '${heldAt.value.day} '
               '(${intToDate[heldAt.value.weekday]})',
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headline4,
             ),
             const SizedBox(width: 8),
             TextButton(
@@ -171,29 +180,38 @@ class CreateNewGameScreen extends HookWidget {
         border: Border.all(color: Theme.of(context).primaryColor),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: TextButton(
+      child: ElevatedButton(
         onPressed: () async {
           if (gameTitleController.text.isEmpty) {
-            Validator().showValidMessage('試合、または試技会のタイトルを入力してください');
+            gameType == GameType.match
+                ? Validator().showValidMessage('試合のタイトルを入力してください')
+                : Validator().showValidMessage('試技会のタイトルを入力してください');
           } else if (!Validator().validKeys(editorKeyController.text)) {
             Validator().showValidMessage('編集者用パスワードは6文字以上です。');
           } else if (!Validator().validKeys(readerKeyController.text)) {
             Validator().showValidMessage('閲覧者用パスワードは6文字以上です。');
+          } else if (editorKeyController.text == readerKeyController.text) {
+            Validator().showValidMessage('2つのパスワードは、異なるものにしてください。');
           } else {
             context.read(loadingStateProvider.notifier).startLoading();
             try {
               //新しい試技会の作成
               await model.createNewGame(
-                  gameTitle: gameTitleController.text,
-                  editorKey: editorKeyController.text,
-                  readerKey: readerKeyController.text,
-                  heldAt: heldAt);
+                gameTitle: gameTitleController.text,
+                editorKey: editorKeyController.text,
+                readerKey: readerKeyController.text,
+                heldAt: heldAt,
+                gameType: gameType,
+              );
               context.read(loadingStateProvider.notifier).endLoading();
               await showOkAlertDialog(context: context, title: '作成できました。');
               //試技会の取得
               await context
                   .read(rehearsalListStateProvider.notifier)
                   .fetchRehearsals(appUser);
+              gameTitleController.clear();
+              editorKeyController.clear();
+              readerKeyController.clear();
               Navigator.pop(context);
             } on Exception {
               await showOkAlertDialog(context: context, title: '作成に失敗しました。');
@@ -203,11 +221,7 @@ class CreateNewGameScreen extends HookWidget {
         },
         child: Text(
           '作成',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Theme.of(context).primaryColor,
-          ),
+          style: TextStyle(color: Theme.of(context).primaryColor),
         ),
       ),
     );
@@ -222,7 +236,7 @@ class CreateNewGameScreen extends HookWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
-        appBar: AppBar(title: const Text('記録の新規作成')),
+        appBar: AppBar(title: const Text('新規作成'), centerTitle: true),
         body: Stack(children: [
           SingleChildScrollView(
             child: Padding(
@@ -230,7 +244,7 @@ class CreateNewGameScreen extends HookWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 24),
-                  _searchGameField(context),
+                  _gameTitleField(context),
                   const SizedBox(height: 16),
                   _editorKeyField(context),
                   const SizedBox(height: 16),

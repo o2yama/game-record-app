@@ -15,13 +15,18 @@ class GameDocument extends StatelessWidget {
         Container(
           decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
           child: ListTile(
-            leading: Text(
-              '${game.heldAt!.month}/${game.heldAt!.day}',
-              textAlign: TextAlign.center,
+            leading: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${game.heldAt!.month}/${game.heldAt!.day}',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+              ],
             ),
             title: Text(
               game.gameTitle,
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.headline4,
             ),
           ),
         ),

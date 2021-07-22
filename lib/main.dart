@@ -1,4 +1,3 @@
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/widgets/restart_widget.dart';
-import 'package:record_game_app/common/widgets/loading_screen.dart';
+import 'package:record_game_app/common/widgets/loading_screen/loading_screen.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/screens/home_screens/home_screen.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up_login_select_screen.dart';
@@ -65,7 +64,7 @@ class MyApp extends HookWidget {
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
-            side: const BorderSide(color: Colors.purple, width: 2),
+            side: const BorderSide(color: Colors.purple, width: 1),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -77,11 +76,23 @@ class MyApp extends HookWidget {
             shape: const RoundedRectangleBorder(side: BorderSide.none),
           ),
         ),
+        textTheme: const TextTheme(
+          headline6: TextStyle(color: Colors.grey, fontSize: 12),
+          headline5: TextStyle(color: Colors.black, fontSize: 16),
+          headline4: TextStyle(color: Colors.black, fontSize: 24),
+        ),
         primaryColor: Colors.purple,
         accentColor: Colors.purpleAccent,
         backgroundColor: Colors.grey[200],
         iconTheme: const IconThemeData(color: Colors.white, size: 20),
-        appBarTheme: const AppBarTheme(centerTitle: false),
+        appBarTheme: const AppBarTheme(
+          centerTitle: false,
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }

@@ -8,9 +8,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/widgets/ad_widget.dart';
 import 'package:record_game_app/common/widgets/large_image/large_image_state.dart';
 import 'package:record_game_app/common/widgets/restart_widget.dart';
-import 'package:record_game_app/common/widgets/loading_screen.dart';
+import 'package:record_game_app/common/widgets/loading_screen/loading_screen.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
-import 'package:record_game_app/common/loading_state.dart';
+import 'package:record_game_app/common/widgets/loading_screen/loading_state.dart';
 
 class AccountScreen extends HookWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -45,7 +45,7 @@ class AccountScreen extends HookWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(name, style: Theme.of(context).textTheme.headline5),
+            Text(name, style: Theme.of(context).textTheme.headline4),
           ],
         ),
       ),
@@ -59,7 +59,8 @@ class AccountScreen extends HookWidget {
           context: context,
           builder: (context) => Platform.isIOS
               ? CupertinoAlertDialog(
-                  title: const Text('このアカウントで再度サインインするには、'
+                  title: const Text('本当にサインアウトしてもよろしいですか？'),
+                  content: const Text('このアカウントで再度サインインするには、'
                       'ご登録のメールアドレスと、パスワードが必要です。'),
                   actions: [
                     TextButton(
@@ -84,7 +85,8 @@ class AccountScreen extends HookWidget {
                   ],
                 )
               : AlertDialog(
-                  title: const Text('このアカウントで再度サインインするには、'
+                  title: const Text('本当にサインアウトしてもよろしいですか？'),
+                  content: const Text('このアカウントで再度サインインするには、'
                       'ご登録のメールアドレスと、パスワードが必要です。'),
                   actions: [
                     TextButton(

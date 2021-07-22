@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/domain/game/game.dart';
@@ -47,7 +46,7 @@ class GameRepository {
     return gameList;
   }
 
-  Future<bool> fetchIsPermittedToEdit(AppUser appUser, Game game) async {
+  Future<bool> isPermittedToEdit(AppUser appUser, Game game) async {
     final gameDocument = await _db
         .collection(games)
         .doc(game.gameId)
@@ -61,9 +60,13 @@ class GameRepository {
     await _db
         .collection(users)
         .doc(appUser.userId)
-        .collection(games)
+        .collection(gameIds)
         .doc(game.gameId)
         .set(<String, dynamic>{'gameId': game.gameId});
+  }
+
+  Future<void> deleteGame(AppUser appUser, Game game) async {
+    await _db.collection(games).doc(game.gameId).delete();
   }
 
   Future<void> createNewTeam(Game game, Team team) async {

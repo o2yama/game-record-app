@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:record_game_app/common/loading_state.dart';
+import 'package:record_game_app/common/widgets/loading_screen/loading_state.dart';
 import 'package:record_game_app/domain/team/team.dart';
-import 'package:record_game_app/screens/game_detail_screen/team_list/team_list_state.dart';
+import 'package:record_game_app/screens/game_detail_screen/team_list/team_list_model.dart';
 import '../game_detail_argument.dart';
 
 final newTeamNameController = TextEditingController();
@@ -14,34 +14,110 @@ class TeamListView extends HookWidget {
       : super(key: key);
   final GameDetailArgument gameDetailArgument;
 
-  Widget teamAddTile(BuildContext context, ValueNotifier<bool> isAdding) {
-    return !isAdding.value
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: () {
-                  isAdding.value = true;
-                },
-                child: const Text('+班を追加'),
-              )
-            ],
-          )
-        : Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: newTeamNameController,
-                  decoration: const InputDecoration(hintText: 'チーム、班の名前'),
-                  keyboardType: TextInputType.text,
-                ),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: const Text('+追加'),
-              ),
-            ],
-          );
+  Widget _addGroupButton(BuildContext context) {
+    final loadingStateModel = context.read(loadingStateProvider.notifier);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          onPressed: () async {
+            await showDialog<Widget>(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Center(
+                      child: Text(
+                        '個人班の追加',
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ),
+                    content: TextField(
+                      controller: newTeamNameController,
+                      decoration: const InputDecoration(hintText: '班の名前'),
+                      keyboardType: TextInputType.text,
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          newTeamNameController.clear();
+                          Navigator.pop(context);
+                        },
+                        child: const Text('キャンセル'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          loadingStateModel.startLoading();
+                          await context
+                              .read(teamListModelProvider(gameDetailArgument)
+                                  .notifier)
+                              .createNewTeamWithoutTotal(
+                                  newTeamNameController.text);
+                          loadingStateModel.endLoading();
+                          newTeamNameController.clear();
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  );
+                });
+          },
+          child: const Text('+個人班を追加'),
+        )
+      ],
+    );
+  }
+
+  Widget _addTeamButton(BuildContext context) {
+    final model =
+        context.refresh(teamListModelProvider(gameDetailArgument).notifier);
+    final loadingStateModel = context.read(loadingStateProvider.notifier);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          onPressed: () async {
+            await showDialog<Widget>(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Center(
+                      child: Text(
+                        'チームの追加',
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ),
+                    content: TextField(
+                        controller: newTeamNameController,
+                        decoration: const InputDecoration(hintText: 'チームの名前'),
+                        keyboardType: TextInputType.text),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          newTeamNameController.clear();
+                          Navigator.pop(context);
+                        },
+                        child: const Text('キャンセル'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          loadingStateModel.startLoading();
+                          await model.createNewTeamWithTotal(
+                              newTeamNameController.text);
+                          loadingStateModel.endLoading();
+                          newTeamNameController.clear();
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  );
+                });
+          },
+          child: const Text('+チームを追加'),
+        )
+      ],
+    );
   }
 
   Widget teamTile(BuildContext context, Team team, int index) {
@@ -57,20 +133,20 @@ class TeamListView extends HookWidget {
         ),
         title: Text(
           team.teamName,
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.headline4,
         ),
-        trailing: team.isTeam
-            ? SizedBox(
-                width: 100,
-                child: Row(
+        trailing: SizedBox(
+          width: 100,
+          child: team.isTeam
+              ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(team.teamTotal.toStringAsFixed(3)),
                   ],
-                ),
-              )
-            : Container(),
+                )
+              : const SizedBox(),
+        ),
       ),
     );
   }
@@ -78,39 +154,46 @@ class TeamListView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final loadingStateModel = useProvider(loadingStateProvider.notifier);
-    final _teamList = useProvider(teamListStateProvider(gameDetailArgument));
     final _teamListModel =
-        useProvider(teamListStateProvider(gameDetailArgument).notifier);
-    final _isAdding = useState(false);
+        useProvider(teamListModelProvider(gameDetailArgument));
 
     Future(() async {
-      if (_teamList == null) {
+      if (_teamListModel.teamList == null) {
         loadingStateModel.startLoading();
         await _teamListModel.fetchTeams();
         loadingStateModel.endLoading();
       }
     });
-    return _teamList == null
+    return _teamListModel.teamList == null
         ? Container()
-        : _teamList.isEmpty
-            ? Container()
-            : Column(children: [
-                teamAddTile(context, _isAdding),
-                Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      loadingStateModel.startLoading();
-                      await _teamListModel.fetchTeams();
-                      loadingStateModel.endLoading();
-                    },
-                    child: ListView.builder(
-                      itemCount: _teamList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return teamTile(context, _teamList[index], index);
-                      },
-                    ),
-                  ),
+        : Column(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _addTeamButton(context),
+                const SizedBox(width: 8),
+                _addGroupButton(context),
+              ],
+            ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  loadingStateModel.startLoading();
+                  await _teamListModel.fetchTeams();
+                  loadingStateModel.endLoading();
+                },
+                child: ListView.builder(
+                  itemCount: _teamListModel.teamList!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return teamTile(
+                      context,
+                      _teamListModel.teamList![index],
+                      index,
+                    );
+                  },
                 ),
-              ]);
+              ),
+            ),
+          ]);
   }
 }
