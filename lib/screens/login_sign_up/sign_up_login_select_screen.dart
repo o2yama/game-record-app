@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:record_game_app/screens/login_sign_up/login/login_screen.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_screen.dart';
+import 'login/login_screen.dart';
 
 class SignUpLoginSelectScreen extends StatelessWidget {
   const SignUpLoginSelectScreen({Key? key}) : super(key: key);
@@ -21,27 +21,23 @@ class SignUpLoginSelectScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil<Widget>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SignUpScreen(),
-                        ),
-                        (route) => false);
-                  },
-                  child: const Text('新規登録'),
+                  onPressed: () => Navigator.of(context)
+                      .pushAndRemoveUntil(SignUpScreen.route(), (_) => false),
+                  child: Text(
+                    '新規登録',
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  ),
                 ),
                 const SizedBox(width: 8),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushAndRemoveUntil<Widget>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                        (route) => false);
+                    Navigator.of(context).pushAndRemoveUntil(
+                        LoginScreen.route(), (route) => false);
                   },
-                  child: const Text('ログイン'),
+                  child: Text(
+                    'ログイン',
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  ),
                 ),
               ],
             ),

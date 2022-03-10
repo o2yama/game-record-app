@@ -10,8 +10,7 @@ part 'app_user.g.dart';
 abstract class AppUser with _$AppUser {
   const factory AppUser({
     @Default('') String userId,
-    @Default('') String email,
-    @Default('unknown') String name,
+    @Default('') String name,
     String? imageUrl,
   }) = _AppUser;
 
@@ -28,8 +27,6 @@ class AppUserState extends StateNotifier<AppUser> {
   UserRepository get userRepository => UserRepository.instance;
   AuthRepository get authRepository => AuthRepository.instance;
 
-  void get setAppUser => state;
-
   Future<AppUser?> getUserData() async {
     final appUser = await userRepository.getUserData();
     if (appUser != null) {
@@ -44,8 +41,7 @@ class AppUserState extends StateNotifier<AppUser> {
     await authRepository.signOut();
     state = const AppUser(
       userId: '',
-      email: '',
-      name: 'unknown',
+      name: '',
       imageUrl: null,
     );
   }

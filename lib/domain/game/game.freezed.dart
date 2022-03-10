@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'game.dart';
 
@@ -23,20 +24,22 @@ class _$GameTearOff {
       {String gameId = '',
       String gameTitle = '',
       DateTime? heldAt,
+      bool isRehearsal = true,
       String editorKey = '',
       String readerKey = '',
-      bool isMatch = true,
       List<String> editorIds = const <String>[],
-      List<String> readerIds = const <String>[]}) {
+      List<String> readerIds = const <String>[],
+      List<String> partyIds = const <String>[]}) {
     return _Game(
       gameId: gameId,
       gameTitle: gameTitle,
       heldAt: heldAt,
+      isRehearsal: isRehearsal,
       editorKey: editorKey,
       readerKey: readerKey,
-      isMatch: isMatch,
       editorIds: editorIds,
       readerIds: readerIds,
+      partyIds: partyIds,
     );
   }
 
@@ -53,11 +56,12 @@ mixin _$Game {
   String get gameId => throw _privateConstructorUsedError;
   String get gameTitle => throw _privateConstructorUsedError;
   DateTime? get heldAt => throw _privateConstructorUsedError;
+  bool get isRehearsal => throw _privateConstructorUsedError;
   String get editorKey => throw _privateConstructorUsedError;
   String get readerKey => throw _privateConstructorUsedError;
-  bool get isMatch => throw _privateConstructorUsedError;
   List<String> get editorIds => throw _privateConstructorUsedError;
   List<String> get readerIds => throw _privateConstructorUsedError;
+  List<String> get partyIds => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -72,11 +76,12 @@ abstract class $GameCopyWith<$Res> {
       {String gameId,
       String gameTitle,
       DateTime? heldAt,
+      bool isRehearsal,
       String editorKey,
       String readerKey,
-      bool isMatch,
       List<String> editorIds,
-      List<String> readerIds});
+      List<String> readerIds,
+      List<String> partyIds});
 }
 
 /// @nodoc
@@ -92,11 +97,12 @@ class _$GameCopyWithImpl<$Res> implements $GameCopyWith<$Res> {
     Object? gameId = freezed,
     Object? gameTitle = freezed,
     Object? heldAt = freezed,
+    Object? isRehearsal = freezed,
     Object? editorKey = freezed,
     Object? readerKey = freezed,
-    Object? isMatch = freezed,
     Object? editorIds = freezed,
     Object? readerIds = freezed,
+    Object? partyIds = freezed,
   }) {
     return _then(_value.copyWith(
       gameId: gameId == freezed
@@ -111,6 +117,10 @@ class _$GameCopyWithImpl<$Res> implements $GameCopyWith<$Res> {
           ? _value.heldAt
           : heldAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      isRehearsal: isRehearsal == freezed
+          ? _value.isRehearsal
+          : isRehearsal // ignore: cast_nullable_to_non_nullable
+              as bool,
       editorKey: editorKey == freezed
           ? _value.editorKey
           : editorKey // ignore: cast_nullable_to_non_nullable
@@ -119,10 +129,6 @@ class _$GameCopyWithImpl<$Res> implements $GameCopyWith<$Res> {
           ? _value.readerKey
           : readerKey // ignore: cast_nullable_to_non_nullable
               as String,
-      isMatch: isMatch == freezed
-          ? _value.isMatch
-          : isMatch // ignore: cast_nullable_to_non_nullable
-              as bool,
       editorIds: editorIds == freezed
           ? _value.editorIds
           : editorIds // ignore: cast_nullable_to_non_nullable
@@ -130,6 +136,10 @@ class _$GameCopyWithImpl<$Res> implements $GameCopyWith<$Res> {
       readerIds: readerIds == freezed
           ? _value.readerIds
           : readerIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      partyIds: partyIds == freezed
+          ? _value.partyIds
+          : partyIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ));
   }
@@ -144,11 +154,12 @@ abstract class _$GameCopyWith<$Res> implements $GameCopyWith<$Res> {
       {String gameId,
       String gameTitle,
       DateTime? heldAt,
+      bool isRehearsal,
       String editorKey,
       String readerKey,
-      bool isMatch,
       List<String> editorIds,
-      List<String> readerIds});
+      List<String> readerIds,
+      List<String> partyIds});
 }
 
 /// @nodoc
@@ -165,11 +176,12 @@ class __$GameCopyWithImpl<$Res> extends _$GameCopyWithImpl<$Res>
     Object? gameId = freezed,
     Object? gameTitle = freezed,
     Object? heldAt = freezed,
+    Object? isRehearsal = freezed,
     Object? editorKey = freezed,
     Object? readerKey = freezed,
-    Object? isMatch = freezed,
     Object? editorIds = freezed,
     Object? readerIds = freezed,
+    Object? partyIds = freezed,
   }) {
     return _then(_Game(
       gameId: gameId == freezed
@@ -184,6 +196,10 @@ class __$GameCopyWithImpl<$Res> extends _$GameCopyWithImpl<$Res>
           ? _value.heldAt
           : heldAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      isRehearsal: isRehearsal == freezed
+          ? _value.isRehearsal
+          : isRehearsal // ignore: cast_nullable_to_non_nullable
+              as bool,
       editorKey: editorKey == freezed
           ? _value.editorKey
           : editorKey // ignore: cast_nullable_to_non_nullable
@@ -192,10 +208,6 @@ class __$GameCopyWithImpl<$Res> extends _$GameCopyWithImpl<$Res>
           ? _value.readerKey
           : readerKey // ignore: cast_nullable_to_non_nullable
               as String,
-      isMatch: isMatch == freezed
-          ? _value.isMatch
-          : isMatch // ignore: cast_nullable_to_non_nullable
-              as bool,
       editorIds: editorIds == freezed
           ? _value.editorIds
           : editorIds // ignore: cast_nullable_to_non_nullable
@@ -203,6 +215,10 @@ class __$GameCopyWithImpl<$Res> extends _$GameCopyWithImpl<$Res>
       readerIds: readerIds == freezed
           ? _value.readerIds
           : readerIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      partyIds: partyIds == freezed
+          ? _value.partyIds
+          : partyIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ));
   }
@@ -215,11 +231,12 @@ class _$_Game implements _Game {
       {this.gameId = '',
       this.gameTitle = '',
       this.heldAt,
+      this.isRehearsal = true,
       this.editorKey = '',
       this.readerKey = '',
-      this.isMatch = true,
       this.editorIds = const <String>[],
-      this.readerIds = const <String>[]});
+      this.readerIds = const <String>[],
+      this.partyIds = const <String>[]});
 
   factory _$_Game.fromJson(Map<String, dynamic> json) =>
       _$_$_GameFromJson(json);
@@ -232,32 +249,28 @@ class _$_Game implements _Game {
   final String gameTitle;
   @override
   final DateTime? heldAt;
+  @JsonKey(defaultValue: true)
+  @override
+  final bool isRehearsal;
   @JsonKey(defaultValue: '')
   @override
   final String editorKey;
   @JsonKey(defaultValue: '')
   @override
   final String readerKey;
-  @JsonKey(defaultValue: true)
-  @override
-  final bool isMatch;
-  @JsonKey(defaultValue: <String>[])
+  @JsonKey(defaultValue: const <String>[])
   @override
   final List<String> editorIds;
-  @JsonKey(defaultValue: <String>[])
+  @JsonKey(defaultValue: const <String>[])
   @override
   final List<String> readerIds;
+  @JsonKey(defaultValue: const <String>[])
+  @override
+  final List<String> partyIds;
 
   @override
   String toString() {
-    return 'Game(gameId: $gameId, '
-        'gameTitle: $gameTitle, '
-        'heldAt: $heldAt, '
-        'editorKey: $editorKey, '
-        'readerKey: $readerKey, '
-        'isMatch: $isMatch, '
-        'editorIds: $editorIds, '
-        'readerIds: $readerIds)';
+    return 'Game(gameId: $gameId, gameTitle: $gameTitle, heldAt: $heldAt, isRehearsal: $isRehearsal, editorKey: $editorKey, readerKey: $readerKey, editorIds: $editorIds, readerIds: $readerIds, partyIds: $partyIds)';
   }
 
   @override
@@ -271,21 +284,24 @@ class _$_Game implements _Game {
                     .equals(other.gameTitle, gameTitle)) &&
             (identical(other.heldAt, heldAt) ||
                 const DeepCollectionEquality().equals(other.heldAt, heldAt)) &&
+            (identical(other.isRehearsal, isRehearsal) ||
+                const DeepCollectionEquality()
+                    .equals(other.isRehearsal, isRehearsal)) &&
             (identical(other.editorKey, editorKey) ||
                 const DeepCollectionEquality()
                     .equals(other.editorKey, editorKey)) &&
             (identical(other.readerKey, readerKey) ||
                 const DeepCollectionEquality()
                     .equals(other.readerKey, readerKey)) &&
-            (identical(other.isMatch, isMatch) ||
-                const DeepCollectionEquality()
-                    .equals(other.isMatch, isMatch)) &&
             (identical(other.editorIds, editorIds) ||
                 const DeepCollectionEquality()
                     .equals(other.editorIds, editorIds)) &&
             (identical(other.readerIds, readerIds) ||
                 const DeepCollectionEquality()
-                    .equals(other.readerIds, readerIds)));
+                    .equals(other.readerIds, readerIds)) &&
+            (identical(other.partyIds, partyIds) ||
+                const DeepCollectionEquality()
+                    .equals(other.partyIds, partyIds)));
   }
 
   @override
@@ -294,11 +310,12 @@ class _$_Game implements _Game {
       const DeepCollectionEquality().hash(gameId) ^
       const DeepCollectionEquality().hash(gameTitle) ^
       const DeepCollectionEquality().hash(heldAt) ^
+      const DeepCollectionEquality().hash(isRehearsal) ^
       const DeepCollectionEquality().hash(editorKey) ^
       const DeepCollectionEquality().hash(readerKey) ^
-      const DeepCollectionEquality().hash(isMatch) ^
       const DeepCollectionEquality().hash(editorIds) ^
-      const DeepCollectionEquality().hash(readerIds);
+      const DeepCollectionEquality().hash(readerIds) ^
+      const DeepCollectionEquality().hash(partyIds);
 
   @JsonKey(ignore: true)
   @override
@@ -316,11 +333,12 @@ abstract class _Game implements Game {
       {String gameId,
       String gameTitle,
       DateTime? heldAt,
+      bool isRehearsal,
       String editorKey,
       String readerKey,
-      bool isMatch,
       List<String> editorIds,
-      List<String> readerIds}) = _$_Game;
+      List<String> readerIds,
+      List<String> partyIds}) = _$_Game;
 
   factory _Game.fromJson(Map<String, dynamic> json) = _$_Game.fromJson;
 
@@ -331,15 +349,17 @@ abstract class _Game implements Game {
   @override
   DateTime? get heldAt => throw _privateConstructorUsedError;
   @override
+  bool get isRehearsal => throw _privateConstructorUsedError;
+  @override
   String get editorKey => throw _privateConstructorUsedError;
   @override
   String get readerKey => throw _privateConstructorUsedError;
   @override
-  bool get isMatch => throw _privateConstructorUsedError;
-  @override
   List<String> get editorIds => throw _privateConstructorUsedError;
   @override
   List<String> get readerIds => throw _privateConstructorUsedError;
+  @override
+  List<String> get partyIds => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$GameCopyWith<_Game> get copyWith => throw _privateConstructorUsedError;

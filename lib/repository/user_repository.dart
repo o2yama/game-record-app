@@ -14,6 +14,8 @@ class UserRepository {
   final _db = FirebaseFirestore.instance;
   final _storage = FirebaseStorage.instance;
 
+  static const users = 'users';
+
   Future<AppUser> createUserInDB(String name, File? userImage) async {
     var imageUrl = '';
     if (userImage != null) {
@@ -27,11 +29,10 @@ class UserRepository {
 
     final appUser = const AppUser().copyWith(
       userId: authRepository.authUser!.uid,
-      email: authRepository.authUser!.email!,
       name: name,
       imageUrl: imageUrl,
     );
-    await _db.collection('users').doc(appUser.userId).set(appUser.toJson());
+    await _db.collection(users).doc(appUser.userId).set(appUser.toJson());
     return appUser;
   }
 
@@ -39,7 +40,7 @@ class UserRepository {
     await authRepository.getAuthUserData();
     if (authRepository.authUser != null) {
       final query =
-          await _db.collection('users').doc(authRepository.authUser!.uid).get();
+          await _db.collection(users).doc(authRepository.authUser!.uid).get();
       if (query.exists) {
         final existData = query.data()!;
         final appUser = AppUser.fromJson(existData).copyWith();

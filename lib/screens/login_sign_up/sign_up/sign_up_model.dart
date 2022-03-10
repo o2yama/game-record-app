@@ -6,7 +6,6 @@ import 'package:record_game_app/common/validator.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/repository/auth_repository.dart';
 import 'package:record_game_app/repository/user_repository.dart';
-import '../auth_exception.dart';
 
 final signUpModelProvider = ChangeNotifierProvider((ref) => SignUpModel());
 

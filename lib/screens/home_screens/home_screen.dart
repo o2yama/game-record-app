@@ -2,15 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:record_game_app/common/widgets/loading_screen/loading_state.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
+import 'package:record_game_app/screens/create_game_rehearsal/create_new_game_screen.dart';
 import 'package:record_game_app/screens/home_screens/account_screen/account_screen.dart';
-import 'package:record_game_app/screens/home_screens/game_list_screen/game_list_screen.dart';
 import 'package:record_game_app/screens/home_screens/rehearsal_list_screen/rehearsal_list_screen.dart';
-import 'package:record_game_app/screens/loading_state.dart';
-import 'favorite_games_screen/favorite_games_screen.dart';
+import 'match_list_screen/match_list_screen.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  static Route<Widget> route() {
+    return MaterialPageRoute<Widget>(builder: (_) => const HomeScreen());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,54 +27,41 @@ class HomeScreen extends HookWidget {
       _loadingStateModel.endLoading();
     });
 
-    return Stack(
-      children: [
-        CupertinoTabScaffold(
-          tabBar: CupertinoTabBar(items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: '試合',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: '試技会',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_border_rounded),
-              label: 'お気に入り',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_rounded),
-              label: 'アカウント',
-            ),
-          ]),
-          tabBuilder: (context, index) {
-            if (index == 0) {
-              return CupertinoTabView(
-                builder: (context) =>
-                    const CupertinoPageScaffold(child: GameListScreen()),
-              );
-            } else if (index == 1) {
-              return CupertinoTabView(
-                builder: (context) =>
-                    const CupertinoPageScaffold(child: RehearsalListScreen()),
-              );
-            } else if (index == 2) {
-              return CupertinoTabView(
-                builder: (context) =>
-                    const CupertinoPageScaffold(child: FavoriteGamesScreen()),
-              );
-            } else if (index == 3) {
-              return CupertinoTabView(
-                builder: (context) =>
-                    const CupertinoPageScaffold(child: AccountScreen()),
-              );
-            } else {
-              return Container();
-            }
-          },
+    return CupertinoTabScaffold(
+      tabBar: CupertinoTabBar(items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.list),
+          label: '試合',
         ),
-      ],
+        BottomNavigationBarItem(
+          icon: Icon(Icons.list),
+          label: '試技会',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.account_circle_rounded),
+          label: 'アカウント',
+        ),
+      ]),
+      tabBuilder: (context, index) {
+        if (index == 0) {
+          return CupertinoTabView(
+            builder: (context) => const CupertinoPageScaffold(
+                child: MatchListScreen(gameType: GameType.match)),
+          );
+        } else if (index == 1) {
+          return CupertinoTabView(
+            builder: (context) => const CupertinoPageScaffold(
+                child: RehearsalListScreen(gameType: GameType.rehearsal)),
+          );
+        } else if (index == 2) {
+          return CupertinoTabView(
+            builder: (context) =>
+                const CupertinoPageScaffold(child: AccountScreen()),
+          );
+        } else {
+          return Container();
+        }
+      },
     );
   }
 }

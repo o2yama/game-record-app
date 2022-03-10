@@ -27,7 +27,10 @@ class PasswordField extends HookWidget {
           ),
         ),
         IconButton(
-          icon: const Icon(Icons.visibility),
+          icon: const Icon(
+            Icons.visibility,
+            color: Colors.grey,
+          ),
           onPressed: () {
             context.read(textVisibilityProvider.notifier).changeVisibility();
           },

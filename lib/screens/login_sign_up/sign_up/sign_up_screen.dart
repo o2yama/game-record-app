@@ -5,12 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/screen_size.dart';
 import 'package:record_game_app/common/validator.dart';
-import 'package:record_game_app/common/widgets/loading_screen.dart';
-import 'package:record_game_app/common/widgets/text_field_clear_button.dart';
+import 'package:record_game_app/common/widgets/loading_screen/loading_screen.dart';
+import 'package:record_game_app/common/widgets/loading_screen/loading_state.dart';
+import 'package:record_game_app/screens/login_sign_up/login/login_screen.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_model.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/wait_email_verify_screen.dart';
-import 'package:record_game_app/screens/loading_state.dart';
-import '../login/login_screen.dart';
+
 import '../widgets/email_field.dart';
 import '../widgets/password_field.dart';
 
@@ -18,6 +18,10 @@ final userNameController = TextEditingController();
 
 class SignUpScreen extends HookWidget {
   const SignUpScreen({Key? key}) : super(key: key);
+
+  static Route<Widget> route() {
+    return MaterialPageRoute<Widget>(builder: (_) => const SignUpScreen());
+  }
 
   //authへの登録処理 => メール認証画面へ
   Future<void> _onResisterButtonPressed(BuildContext context) async {
@@ -27,11 +31,8 @@ class SignUpScreen extends HookWidget {
           .read(signUpModelProvider)
           .createUserInAuth(emailController.text, passwordController.text);
       context.read(loadingStateProvider.notifier).endLoading();
-      await Navigator.pushAndRemoveUntil<Widget>(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const WaitEmailVerifyScreen(),
-        ),
+      await Navigator.of(context).pushAndRemoveUntil<Widget>(
+        WaitEmailVerifyScreen.route(),
         (_) => false,
       );
     } on Exception catch (e) {
@@ -87,10 +88,6 @@ class SignUpScreen extends HookWidget {
                 ? Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: TextButton(
-                      style: TextButton.styleFrom(
-                        side: BorderSide.none,
-                        elevation: 0,
-                      ),
                       onPressed: model.deleteImage,
                       child: const Text('現在の写真の削除'),
                     ),
@@ -113,10 +110,7 @@ class SignUpScreen extends HookWidget {
         TextField(
           controller: userNameController,
           keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-            labelText: 'お名前',
-            suffixIcon: TextFieldClearButton(controller: userNameController),
-          ),
+          decoration: const InputDecoration(labelText: 'お名前'),
           onChanged: model.serUserName,
         ),
         const Text('※必須', style: TextStyle(color: Colors.red)),
@@ -125,27 +119,20 @@ class SignUpScreen extends HookWidget {
   }
 
   Widget _resisterButton(BuildContext context) {
-    return TextButton(
+    return ElevatedButton(
       onPressed: () => _onResisterButtonPressed(context),
       child: Text(
         '登録',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-          color: Theme.of(context).primaryColor,
-        ),
+        style: TextStyle(color: Theme.of(context).primaryColor),
       ),
     );
   }
 
   Widget _toLoginScreenButton(BuildContext context) {
     return TextButton(
-      style: TextButton.styleFrom(elevation: 0, side: BorderSide.none),
       onPressed: () {
-        Navigator.pushAndRemoveUntil<Object>(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
-            (_) => false);
+        Navigator.of(context)
+            .pushAndRemoveUntil<Object>(LoginScreen.route(), (_) => false);
       },
       child: const Text('ユーザー登録済みの方はこちら', style: TextStyle(color: Colors.blue)),
     );
