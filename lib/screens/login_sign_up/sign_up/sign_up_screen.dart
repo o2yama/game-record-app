@@ -6,10 +6,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/screen_size.dart';
 import 'package:record_game_app/common/validator.dart';
 import 'package:record_game_app/common/widgets/loading_screen/loading_screen.dart';
+import 'package:record_game_app/common/widgets/loading_screen/loading_state.dart';
 import 'package:record_game_app/screens/login_sign_up/login/login_screen.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_model.dart';
-import 'package:record_game_app/common/widgets/loading_screen/loading_state.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/wait_email_verify_screen.dart';
+
 import '../widgets/email_field.dart';
 import '../widgets/password_field.dart';
 
@@ -171,7 +172,7 @@ class SignUpScreen extends HookWidget {
               ),
             ),
           ),
-          _isLoading ? LoadingScreen(context) : Container(),
+          _isLoading ? const LoadingScreen() : Container(),
         ]),
       ),
     );

@@ -16,14 +16,11 @@ _$_Game _$_$_GameFromJson(Map<String, dynamic> json) {
     isRehearsal: json['isRehearsal'] as bool? ?? true,
     editorKey: json['editorKey'] as String? ?? '',
     readerKey: json['readerKey'] as String? ?? '',
-    editorIds: (json['editorIds'] as List<dynamic>?)
-            ?.map((dynamic e) => e as String)
-            .toList() ??
-        [],
-    readerIds: (json['readerIds'] as List<dynamic>?)
-            ?.map((dynamic e) => e as String)
-            .toList() ??
-        [],
+    editorIds:
+        (json['editorIds'] as List<String>?)?.map((e) => e).toList() ?? [],
+    readerIds:
+        (json['readerIds'] as List<String>?)?.map((e) => e).toList() ?? [],
+    partyIds: (json['partyIds'] as List<String>?)?.map((e) => e).toList() ?? [],
   );
 }
 
@@ -36,4 +33,5 @@ Map<String, dynamic> _$_$_GameToJson(_$_Game instance) => <String, dynamic>{
       'readerKey': instance.readerKey,
       'editorIds': instance.editorIds,
       'readerIds': instance.readerIds,
+      'partyIds': instance.partyIds,
     };

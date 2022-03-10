@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/domain/game/game.dart';
 import 'package:record_game_app/repository/game_repository.dart';
-import 'package:record_game_app/screens/create_new_rehearsal/create_new_game_screen.dart';
 import 'package:uuid/uuid.dart';
+
+import 'create_new_game_screen.dart';
 
 final createNewGameModelProvider = ChangeNotifierProvider.family(
     (ref, AppUser appUser) => CreateNewGameModel(appUser: appUser));

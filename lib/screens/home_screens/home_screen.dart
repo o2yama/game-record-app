@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:record_game_app/common/widgets/loading_screen/loading_state.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
-import 'package:record_game_app/screens/create_new_rehearsal/create_new_game_screen.dart';
+import 'package:record_game_app/screens/create_game_rehearsal/create_new_game_screen.dart';
 import 'package:record_game_app/screens/home_screens/account_screen/account_screen.dart';
 import 'package:record_game_app/screens/home_screens/rehearsal_list_screen/rehearsal_list_screen.dart';
-import 'package:record_game_app/common/widgets/loading_screen/loading_state.dart';
 import 'match_list_screen/match_list_screen.dart';
 
 class HomeScreen extends HookWidget {

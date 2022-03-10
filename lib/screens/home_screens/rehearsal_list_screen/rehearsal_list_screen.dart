@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/widgets/ad_widget.dart';
-import 'package:record_game_app/common/widgets/simple_text_field.dart';
-import 'package:record_game_app/screens/home_screens/match_list_screen/game_document.dart';
 import 'package:record_game_app/common/widgets/loading_screen/loading_screen.dart';
+import 'package:record_game_app/common/widgets/loading_screen/loading_state.dart';
+import 'package:record_game_app/common/widgets/simple_text_field.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/domain/game/game.dart';
-import 'package:record_game_app/screens/create_new_rehearsal/create_new_game_screen.dart';
-import 'package:record_game_app/screens/game_detail_screen/game_detail_argument.dart';
-import 'package:record_game_app/screens/game_detail_screen/game_detail_screen.dart';
+import 'package:record_game_app/screens/create_game_rehearsal/create_new_game_screen.dart';
+import 'package:record_game_app/screens/game_detail_screen/team_list_argument.dart';
+import 'package:record_game_app/screens/game_detail_screen/team_list_screen.dart';
+import 'package:record_game_app/screens/home_screens/match_list_screen/game_document.dart';
 import 'package:record_game_app/screens/home_screens/rehearsal_list_screen/rehearsal_list_state.dart';
-import 'package:record_game_app/common/widgets/loading_screen/loading_state.dart';
 
 final _rehearsalController = TextEditingController();
 
@@ -48,7 +48,7 @@ class RehearsalListScreen extends HookWidget {
         body: Stack(children: [
           const RehearsalListView(),
           const AdWidget(),
-          _isLoading ? LoadingScreen(context) : Container(),
+          _isLoading ? const LoadingScreen() : Container(),
         ]),
       ),
     );
@@ -72,8 +72,7 @@ class RehearsalListView extends HookWidget {
   Widget _rehearsalTile(BuildContext context, Game game) {
     return InkWell(
       onTap: () => Navigator.of(context).push<Widget>(
-        GameDetailScreen.route(
-            gameDetailArgument: GameDetailArgument(game: game)),
+        TeamListScreen.route(teamListArgument: TeamListArgument(game: game)),
       ),
       child: GameDocument(game: game),
     );

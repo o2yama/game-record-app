@@ -1,10 +1,7 @@
 users:
-  name: String #Default = unknown
+  name: String
   imageUrl: String?
-
-  invisibleUserFields:
-    email: String
-    userId: String
+  userId: String
 
   tokens: #documentのIDとToken統一
     token: String
@@ -17,33 +14,60 @@ games:
   gameTitle: String
   heldAt: Timestamp
   isRehearsal: bool
+  readerKey: String #6文字以上自動生成（編集可）
   editorKey: String #6文字以上
-  readerKey: String #6文字以上
-  editors: [String]  #editorのuserIdリスト
-  readers: [String] #readerのuserIdリスト
+  editorIds: [String]
+  readerIds: [String]
+  partyIds: [String]
 
-  teams:
-    teamId: String
-    teamName: String
+  parties:
+    partyId: String
+    partyName: String
     isTeam: bool
-    teamTotal: num #チームだったら
+    teamTotal: num
+    menberIds: <String>[]
+
 
     players:
       playerId: String
       name: String
       grade: int #学年
+      totalScore: num
+      fx: num
+      ph: num
+      sr: num
+      vt: num
+      pb: num
+      hb: num
 
-      fx:
-        scoreId: String #playerIdと一緒
+      fxDetail: #score_detail型
+        scoreId: String #playerIdと一致
         d: num
         e: num
         nd: num
-        total: num
-      ph:
-      sr:
-      vt:
-      pb:
-      hb:
-
-
+      phDtail:
+        scoreId: String #playerIdと一致
+          d: num
+          e: num
+          nd: num
+      srDtail:
+        scoreId: String #playerIdと一致
+          d: num
+          e: num
+          nd: num
+      vtDtail:
+        scoreId: String #playerIdと一致
+          d: num
+          e: num
+          nd: num
+      pbDtail:
+        scoreId: String #playerIdと一致
+          d: num
+          e: num
+          nd: num
+      hbDtail:
+        scoreId: String #playerIdと一致
+          d: num
+          e: num
+          nd: num
 

@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/widgets/loading_screen/loading_state.dart';
-import 'package:record_game_app/domain/team/team.dart';
+import 'package:record_game_app/domain/party/party.dart';
 import 'package:record_game_app/screens/game_detail_screen/team_list/team_list_model.dart';
-import '../game_detail_argument.dart';
+import 'package:record_game_app/screens/score_sheet_screen/score_sheet_screen.dart';
+import 'package:record_game_app/screens/score_sheet_screen/score_sheet_argument.dart';
+import '../team_list_argument.dart';
 
 final newTeamNameController = TextEditingController();
 
 class TeamListView extends HookWidget {
   const TeamListView({Key? key, required this.gameDetailArgument})
       : super(key: key);
-  final GameDetailArgument gameDetailArgument;
+  final TeamListArgument gameDetailArgument;
 
   Widget _addGroupButton(BuildContext context) {
     final loadingStateModel = context.read(loadingStateProvider.notifier);
@@ -103,8 +105,8 @@ class TeamListView extends HookWidget {
                         onPressed: () async {
                           Navigator.pop(context);
                           loadingStateModel.startLoading();
-                          await model.createNewTeamWithTotal(
-                              newTeamNameController.text);
+                          await model
+                              .createPartyWithTotal(newTeamNameController.text);
                           loadingStateModel.endLoading();
                           newTeamNameController.clear();
                         },
@@ -120,11 +122,15 @@ class TeamListView extends HookWidget {
     );
   }
 
-  Widget teamTile(BuildContext context, Team team, int index) {
+  Widget teamTile(BuildContext context, Party party, int index) {
     return Container(
       decoration: const BoxDecoration(border: Border(bottom: BorderSide())),
       child: ListTile(
-        onTap: () {},
+        onTap: () => Navigator.of(context).push(
+          ScoreSheetScreen.route(
+            ScoreSheetArgument(game: gameDetailArgument.game, party: party),
+          ),
+        ),
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -132,17 +138,17 @@ class TeamListView extends HookWidget {
           ],
         ),
         title: Text(
-          team.teamName,
+          party.partyName,
           style: Theme.of(context).textTheme.headline4,
         ),
         trailing: SizedBox(
           width: 100,
-          child: team.isTeam
+          child: party.isTeam
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(team.teamTotal.toStringAsFixed(3)),
+                    Text(party.teamTotal.toStringAsFixed(3)),
                   ],
                 )
               : const SizedBox(),
@@ -155,7 +161,7 @@ class TeamListView extends HookWidget {
   Widget build(BuildContext context) {
     final loadingStateModel = useProvider(loadingStateProvider.notifier);
     final _teamListModel =
-        useProvider(teamListModelProvider(gameDetailArgument));
+        useProvider(teamListModelProvider(gameDetailArgument).notifier);
 
     Future(() async {
       if (_teamListModel.teamList == null) {

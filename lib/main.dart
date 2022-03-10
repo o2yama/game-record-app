@@ -5,8 +5,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:record_game_app/common/widgets/restart_widget.dart';
 import 'package:record_game_app/common/widgets/loading_screen/loading_screen.dart';
+import 'package:record_game_app/common/widgets/restart_widget.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/screens/home_screens/home_screen.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up_login_select_screen.dart';
@@ -16,9 +16,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   runApp(
     const RestartWidget(
-      child: ProviderScope(
-        child: MyApp(),
-      ),
+      child: ProviderScope(child: MyApp()),
     ),
   );
 }
@@ -47,7 +45,7 @@ class MyApp extends HookWidget {
         future: _appUserModel.getUserData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(body: LoadingScreen(context));
+            return const Scaffold(body: LoadingScreen());
           } else if (snapshot.data == null) {
             return const SignUpLoginSelectScreen();
           } else {
@@ -82,7 +80,6 @@ class MyApp extends HookWidget {
           headline4: TextStyle(color: Colors.black, fontSize: 24),
         ),
         primaryColor: Colors.purple,
-        accentColor: Colors.purpleAccent,
         backgroundColor: Colors.grey[200],
         iconTheme: const IconThemeData(color: Colors.white, size: 20),
         appBarTheme: const AppBarTheme(
@@ -93,6 +90,8 @@ class MyApp extends HookWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        colorScheme:
+            ColorScheme.fromSwatch().copyWith(secondary: Colors.purpleAccent),
       ),
     );
   }

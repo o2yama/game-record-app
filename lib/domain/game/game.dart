@@ -14,6 +14,7 @@ abstract class Game with _$Game {
     @Default('') String readerKey,
     @Default(<String>[]) List<String> editorIds,
     @Default(<String>[]) List<String> readerIds,
+    @Default(<String>[]) List<String> partyIds,
   }) = _Game;
 
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);

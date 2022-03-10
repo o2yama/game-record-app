@@ -5,13 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:record_game_app/common/validator.dart';
 import 'package:record_game_app/common/widgets/loading_screen/loading_screen.dart';
+import 'package:record_game_app/common/widgets/loading_screen/loading_state.dart';
 import 'package:record_game_app/domain/app_user/app_user.dart';
 import 'package:record_game_app/screens/home_screens/home_screen.dart';
 import 'package:record_game_app/screens/login_sign_up/login/login_model.dart';
 import 'package:record_game_app/screens/login_sign_up/sign_up/sign_up_screen.dart';
 import 'package:record_game_app/screens/login_sign_up/widgets/email_field.dart';
 import 'package:record_game_app/screens/login_sign_up/widgets/password_field.dart';
-import 'package:record_game_app/common/widgets/loading_screen/loading_state.dart';
 
 class LoginScreen extends HookWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -93,7 +93,7 @@ class LoginScreen extends HookWidget {
                 ],
               ),
             ),
-            _isLoading ? LoadingScreen(context) : Container(),
+            _isLoading ? const LoadingScreen() : Container(),
           ]),
         ),
       ),

@@ -27,8 +27,6 @@ class AppUserState extends StateNotifier<AppUser> {
   UserRepository get userRepository => UserRepository.instance;
   AuthRepository get authRepository => AuthRepository.instance;
 
-  void get setAppUser => state;
-
   Future<AppUser?> getUserData() async {
     final appUser = await userRepository.getUserData();
     if (appUser != null) {
